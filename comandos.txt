@@ -1,0 +1,26 @@
+funcionalidade;id1;id2;id3
+1;1;1;0 // Alice leu "O Iluminado"
+1;1;2;0 // Alice leu "Garota Exemplar"
+1;2;10;0 // Bob leu "O Nome da Rosa"
+1;2;2;0 // Bob leu "Garota Exemplar"
+1;3;4;0 // Clara leu "Drácula"
+2;3;5;0 // Clara deseja ler “Assassinato no Expresso
+Oriente”
+2;1;3;0 // Alice deseja ler "Orgulho e Preconceito"
+2;2;4;0 // Bob deseja ler "Drácula"
+3;1;1;2 // Alice recomenda "O Iluminado" para Bob
+3;2;10;1 // Bob recomenda "O Nome da Rosa" para Alice
+3;2;11;3 // Bob recomenda "O Senhor dos Anéis: A Sociedade do
+Anel" para Clara
+3;3;8;2 // Clara recomenda "A Culpa é das Estrelas" para
+Bob
+4;3;11;2 // Clara aceita recomendação "O Senhor dos Anéis: A
+Sociedade do Anel" de Bob
+5;1;10;2 // Alice rejeita recomendação "O Nome da Rosa" de
+Bob
+6;1;0;2 // Descobrir livros em comum entre Alice e Bob
+6;1;0;3 // Descobrir livros em comum entre Alice e Clara
+6;2;0;3 // Descobrir livros em comum entre Bob e Clara
+7;2;0;3 // Verificar Afinidade entre Bob e Clara
+7;1;0;3 // Verificar Afinidade entre Alice e Clara
+8;0;0;0 // Imprime toda a BookED
