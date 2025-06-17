@@ -44,6 +44,17 @@ int GetIdLivro(tLivro *livro){
 }
 
 /*
+ * Retorna o nome de um livro.
+ * Inputs: ponteiro para um elemento do tipo "tLivro"
+ * Outputs: o nome (string/char*) do livro passado como parâmetro
+ * Pre-condicao: o livro passado tem os campos preechidos (ou seja, não está "vazio")
+ * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
+*/
+char *GetNomeLivro(tLivro *livro){
+    return livro->titulo;
+}
+
+/*
  * Imprime o título de um único livro.
  * Inputs: ponteiro para um elemento do tipo "tLivro"
  * Outputs: nenhum

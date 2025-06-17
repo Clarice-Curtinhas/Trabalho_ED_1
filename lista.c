@@ -95,7 +95,7 @@ void *BuscaLista(tLista *lista, int id){
  * Pre-condicao: a lista e o elemento existem (estão alocados)
  * Pos-condicao: se o elemento foi encontrado, retira o elemento da lista, se não, a lista permanece inalterada
 */
-void RetiraLista(tLista *lista, int id){
+void  RetiraLista(tLista *lista, int id){
    tCelula *aux;
 
    aux = BuscaLista(lista, id);
@@ -129,8 +129,9 @@ void RetiraLista(tLista *lista, int id){
          aux->ant->prox = aux->prox;
          aux->prox->ant = aux->ant;
       }
-
-      free(aux);
+      
+      //return aux; // talvez a gnt deva usar um return para caso precisarmos desse livro;
+      //free(aux); // comentei para podermos usar um livro mais de uma vez, se vc da um free aqui ela para de existir em outras listas
    }
 }
 
