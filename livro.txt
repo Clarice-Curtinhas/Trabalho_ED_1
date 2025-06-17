@@ -1,4 +1,3 @@
-id;titulo;autor;genero;ano
 1;O Iluminado;Stephen King;Terror;1977
 2;Garota Exemplar;Gillian Flynn;Mistério;2012
 3;Orgulho e Preconceito;Jane Austen;Romance;1813
