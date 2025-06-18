@@ -38,6 +38,8 @@ tLivro *ProcuraLivroEmComum(tLeitor *leitor1, tLeitor *leitor2);
 
 int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2);
 
+int GetIdLeitor(tLeitor *leitor);
+
 void ImprimeLeitor(tLeitor *leitor);
 
 void DesalocaLeitor(tLeitor *leitor);

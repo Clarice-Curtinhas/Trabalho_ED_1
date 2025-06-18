@@ -87,6 +87,10 @@ tLivro *ProcuraLivroEmComum(tLeitor *leitor1, tLeitor *leitor2){
 
 int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2);
 
+int GetIdLeitor(tLeitor *leitor){
+    return leitor->id;
+}
+
 void ImprimeLeitor(tLeitor *leitor){
     printf("Leitor: %s\n", leitor->nome);
     printf("Lidos: ");

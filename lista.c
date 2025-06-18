@@ -10,9 +10,6 @@ struct Celula {
    void *info;
    tCelula *prox;
    tCelula *ant;
-   func_ptr_getId getId;
-   func_ptr_imprime imprime;
-   func_ptr_libera libera;
 };
 
 struct Lista {
@@ -64,19 +61,19 @@ void InsereLista(tLista *lista, void *elemento){
 }
 
 /*
- * Busca um elemento na lista indicada.
- * Inputs: ponteiro para a lista, ID do elemento a ser procurado
+ * Busca um leitor na lista indicada.
+ * Inputs: ponteiro para a lista, ID do leitor a ser procurado
  * Outputs: nenhum
- * Pre-condicao: a lista e o elemento existem (estão alocados)
- * Pos-condicao: se o elemento foi encontrado, retorna o ponteiro para ele, se não, não retorna nada
+ * Pre-condicao: a lista e o leitor existem (estão alocados)
+ * Pos-condicao: se o litor foi encontrado, retorna o ponteiro para ele, se não, retorna NULL
 */
-void *BuscaLista(tLista *lista, int id){
+void *BuscaListaLeitor(tLista *lista, int id){
    tCelula *aux;
    int idAux;
    aux = lista->prim;
 
    while(aux != NULL){
-      idAux = aux->getId(aux->info);
+      idAux = GetIdLeitor(aux->info);
 
       if (idAux == id){
          return aux;
@@ -89,16 +86,41 @@ void *BuscaLista(tLista *lista, int id){
 }
 
 /*
- * Retira um elemento da lista indicada.
- * Inputs: ponteiro para a lista, ID do elemento a ser procurado
+ * Busca um livro na lista indicada.
+ * Inputs: ponteiro para a lista, ID do livro a ser procurado
  * Outputs: nenhum
- * Pre-condicao: a lista e o elemento existem (estão alocados)
- * Pos-condicao: se o elemento foi encontrado, retira o elemento da lista, se não, a lista permanece inalterada
+ * Pre-condicao: a lista e o livro existem (estão alocados)
+ * Pos-condicao: se o livro foi encontrado, retorna o ponteiro para ele, se não, retorna NULL
 */
-void  RetiraLista(tLista *lista, int id){
+void *BuscaListaLivro(tLista *lista, int id){
+   tCelula *aux;
+   int idAux;
+   aux = lista->prim;
+
+   while(aux != NULL){
+      idAux = GetIdLivro(aux->info);
+
+      if (idAux == id){
+         return aux;
+      }
+
+      aux = aux->prox;
+   }
+
+   return NULL;
+}
+
+/*
+ * Retira um leitor da lista indicada.
+ * Inputs: ponteiro para a lista, ID do leitor a ser procurado
+ * Outputs: nenhum
+ * Pre-condicao: a lista e o leitor existem (estão alocados)
+ * Pos-condicao: se o leitor foi encontrado, retira o leitor da lista, se não, a lista permanece inalterada
+*/
+void RetiraListaLeitor(tLista *lista, int id){
    tCelula *aux;
 
-   aux = BuscaLista(lista, id);
+   aux = BuscaListaLeitor(lista, id);
 
    if (aux != NULL){
       if (aux->ant == NULL){ // Verifica se e o primeiro da lista
@@ -136,37 +158,130 @@ void  RetiraLista(tLista *lista, int id){
 }
 
 /*
- * Imprime uma lista.
+ * Retira um livro da lista indicada.
+ * Inputs: ponteiro para a lista, ID do livro a ser procurado
+ * Outputs: nenhum
+ * Pre-condicao: a lista e o livro existem (estão alocados)
+ * Pos-condicao: se o livro foi encontrado, retira o livro da lista, se não, a lista permanece inalterada
+*/
+void RetiraListaLivro(tLista *lista, int id){
+   tCelula *aux;
+
+   aux = BuscaListaLivro(lista, id);
+
+   if (aux != NULL){
+      if (aux->ant == NULL){ // Verifica se e o primeiro da lista
+         lista->prim = aux->prox;
+
+         if (lista->prim != NULL){
+            lista->prim->ant = NULL;
+         }
+
+         else {
+            lista->ult = NULL; // Lista ficou vazia
+         }
+      }
+
+      else if (aux->prox == NULL){ // Verifica se é o último da lista
+         lista->ult = aux->ant;
+
+         if (lista->ult != NULL){
+            lista->ult->prox = NULL;
+         }
+
+         else {
+            lista->prim = NULL; // Lista ficou vazia
+         }
+      }
+
+      else { // Retira elemento do meio da lista
+         aux->ant->prox = aux->prox;
+         aux->prox->ant = aux->ant;
+      }
+      
+      //return aux; // talvez a gnt deva usar um return para caso precisarmos desse livro;
+      //free(aux); // comentei para podermos usar um livro mais de uma vez, se vc da um free aqui ela para de existir em outras listas
+   }
+}
+
+/*
+ * Imprime uma lista de leitores.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
  * Pre-condicao: a lista existe (está alocada)
  * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
 */
-void ImprimeLista(tLista *lista){
+void ImprimeListaLeitor(tLista *lista){
    tCelula *aux;
    aux = lista->prim;
 
    while(aux != NULL){
-      aux->imprime(aux->info);
+      ImprimeLeitor(aux->info);
       aux = aux->prox;
    }
 }
 
 /*
- * Libera a memória de uma lista.
+ * Imprime uma lista de livros.
+ * Inputs: ponteiro para a lista
+ * Outputs: nenhum
+ * Pre-condicao: a lista existe (está alocada)
+ * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
+*/
+void ImprimeListaLivro(tLista *lista){
+   tCelula *aux;
+   aux = lista->prim;
+
+   while(aux != NULL){
+      ImprimeLeitor(aux->info);
+      aux = aux->prox;
+   }
+}
+
+/*
+ * Libera a memória de uma lista de leitores.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
  * Pre-condicao: a lista existe (está alocada)
  * Pos-condicao: memórias da lista e dos seus elementos liberadas
 */
-void LiberaLista(tLista *lista){
+void LiberaListaLeitor(tLista *lista){
    tCelula *aux;
    aux = lista->prim;
 
    if (lista != NULL){
 
       while(1){
-         aux->libera(aux->info);
+         LiberaLeitor(aux->info);
+      
+         if (aux->prox != NULL){
+            aux = aux->prox;
+            free(aux->ant);
+         }
+
+         else {
+            free(aux);
+            break;
+         }
+      }
+   }
+}
+
+/*
+ * Libera a memória de uma lista de livros.
+ * Inputs: ponteiro para a lista
+ * Outputs: nenhum
+ * Pre-condicao: a lista existe (está alocada)
+ * Pos-condicao: memórias da lista e dos seus elementos liberadas
+*/
+void LiberaListaLivro(tLista *lista){
+   tCelula *aux;
+   aux = lista->prim;
+
+   if (lista != NULL){
+
+      while(1){
+         LiberaLivro(aux->info);
       
          if (aux->prox != NULL){
             aux = aux->prox;

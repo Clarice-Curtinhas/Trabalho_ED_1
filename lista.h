@@ -14,10 +14,6 @@ typedef struct Celula tCelula;
 
 typedef struct Lista tLista;
 
-typedef int (*func_ptr_getId)(void *elemento);
-typedef void (*func_ptr_imprime)(void *elemento);
-typedef void (*func_ptr_libera)(void *elemento);
-
 /*
  * Cria uma nova lista, alocando memória para ela.
  * Inputs: nenhum
@@ -37,39 +33,75 @@ tLista *CriaLista();
 void InsereLista(tLista *lista, void *elemento);
 
 /*
- * Busca um elemento na lista indicada.
- * Inputs: ponteiro para a lista, ID do elemento a ser procurado
+ * Busca um leitor na lista indicada.
+ * Inputs: ponteiro para a lista, ID do leitor a ser procurado
  * Outputs: nenhum
- * Pre-condicao: a lista e o elemento existem (estão alocados)
- * Pos-condicao: se o elemento foi encontrado, retorna o ponteiro para ele, se não, não retorna nada
+ * Pre-condicao: a lista e o leitor existem (estão alocados)
+ * Pos-condicao: se o litor foi encontrado, retorna o ponteiro para ele, se não, retorna NULL
 */
-void *BuscaLista(tLista *lista, int id);
+void *BuscaListaLeitor(tLista *lista, int id);
 
 /*
- * Retira um elemento da lista indicada.
- * Inputs: ponteiro para a lista, ID do elemento a ser procurado
+ * Busca um livro na lista indicada.
+ * Inputs: ponteiro para a lista, ID do livro a ser procurado
  * Outputs: nenhum
- * Pre-condicao: a lista e o elemento existem (estão alocados)
- * Pos-condicao: se o elemento foi encontrado, retira o elemento da lista, se não, a lista permanece inalterada
+ * Pre-condicao: a lista e o livro existem (estão alocados)
+ * Pos-condicao: se o livro foi encontrado, retorna o ponteiro para ele, se não, retorna NULL
 */
-void RetiraLista(tLista *lista, int id);
+void *BuscaListaLivro(tLista *lista, int id);
 
 /*
- * Imprime uma lista.
+ * Retira um leitor da lista indicada.
+ * Inputs: ponteiro para a lista, ID do leitor a ser procurado
+ * Outputs: nenhum
+ * Pre-condicao: a lista e o leitor existem (estão alocados)
+ * Pos-condicao: se o leitor foi encontrado, retira o leitor da lista, se não, a lista permanece inalterada
+*/
+void RetiraListaLeitor(tLista *lista, int id);
+
+/*
+ * Retira um livro da lista indicada.
+ * Inputs: ponteiro para a lista, ID do livro a ser procurado
+ * Outputs: nenhum
+ * Pre-condicao: a lista e o livro existem (estão alocados)
+ * Pos-condicao: se o livro foi encontrado, retira o livro da lista, se não, a lista permanece inalterada
+*/
+void RetiraListaLivro(tLista *lista, int id);
+
+/*
+ * Imprime uma lista de leitores.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
  * Pre-condicao: a lista existe (está alocada)
  * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
 */
-void ImprimeLista(tLista *lista);
+void ImprimeListaLeitor(tLista *lista);
 
 /*
- * Libera a memória de uma lista.
+ * Imprime uma lista de livros.
+ * Inputs: ponteiro para a lista
+ * Outputs: nenhum
+ * Pre-condicao: a lista existe (está alocada)
+ * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
+*/
+void ImprimeListaLivro(tLista *lista);
+
+/*
+ * Libera a memória de uma lista de leitores.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
  * Pre-condicao: a lista existe (está alocada)
  * Pos-condicao: memórias da lista e dos seus elementos liberadas
 */
-void LiberaLista(tLista *lista);
+void LiberaListaLeitor(tLista *lista);
+
+/*
+ * Libera a memória de uma lista de livros.
+ * Inputs: ponteiro para a lista
+ * Outputs: nenhum
+ * Pre-condicao: a lista existe (está alocada)
+ * Pos-condicao: memórias da lista e dos seus elementos liberadas
+*/
+void LiberaListaLivro(tLista *lista);
 
 #endif
