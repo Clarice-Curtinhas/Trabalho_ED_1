@@ -3,15 +3,14 @@
  * Copyright © 2025 Clarice Curtinhas Santos,  Ana Luisa Casotti de Andrade. All rights reserved.
  */
 
- #ifndef LEITOR_H
- #define LEITOR_H
+#ifndef LEITOR_H
+#define LEITOR_H
 
- #include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "livro.h"
-#include "lista.h"
 
 typedef struct Leitor tLeitor;
 
@@ -24,11 +23,15 @@ typedef struct Leitor tLeitor;
 */
 tLeitor *CriaLeitor(char *nome, int id);
 
+void AdicionarGenero(tLeitor *leitor, char *genero);
+
+void AssociaLeitores(tLeitor *leitor1, tLeitor *leitor2);
+
 void AdicionarLivroLido(tLeitor *leitor, tLivro *livro);
 
 void AdicionarLivroDesejado(tLeitor *leitor, tLivro *livro);
 
-void RecomendarLivro(tLeitor *leitorOrig, tLivro *livro, tLeitor *leitorDest);
+void RecomendarLivro(tLeitor *leitorOrig, int id, tLeitor *leitorDest);
 
 void AceitarRecomendacao(tLeitor *leitorOrig, tLivro *livro, int acao);
 
@@ -39,6 +42,8 @@ tLivro *ProcuraLivroEmComum(tLeitor *leitor1, tLeitor *leitor2);
 int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2);
 
 int GetIdLeitor(tLeitor *leitor);
+
+char *GetNomeLeitor(tLeitor *leitor);
 
 void ImprimeLeitor(tLeitor *leitor);
 

@@ -3,11 +3,7 @@
  * Copyright © 2025 Clarice Curtinhas Santos, Ana Luisa Casotti de Andrade. All rights reserved.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "livro.h"
+#include "leitor.h"
 #include "lista.h"
 
 #define TRUE 1
@@ -16,6 +12,7 @@
 typedef struct Leitor{
     int id;
     char *nome;
+    tLista *generos; //lista para guardar qual as preferências de leitura de cada leitor
     tLista *lidos;
     tLista *desejados;
     tLista *recomendacoes;
@@ -37,6 +34,7 @@ tLeitor *CriaLeitor(char *nome, int id){
     l->nome = strdup(nome);
     l->id = id;
 
+    l->generos = CriaLista();
     l->lidos = CriaLista();
     l->desejados = CriaLista();
     l->recomendacoes = CriaLista();
@@ -45,35 +43,51 @@ tLeitor *CriaLeitor(char *nome, int id){
     return l;
 }
 
+void AdicionarGenero(tLeitor *leitor, char *genero){
+    InsereStringLista(leitor->generos, genero);
+}
+
+void AssociaLeitores(tLeitor *leitor1, tLeitor *leitor2){
+    if(leitor1 != NULL && leitor2 != NULL){
+        if(ComparaListasStrings(leitor1->generos, leitor2->generos) == TRUE){
+            InsereLeitorLista(leitor1->afinidades, leitor2);
+            InsereLeitorLista(leitor2->afinidades, leitor1);
+        }
+    }
+}
+
 void AdicionarLivroLido(tLeitor *leitor, tLivro *livro){
-    InsereLista(leitor->lidos, livro);
+    InsereLivroLista(leitor->lidos, livro);
 }
 
 void AdicionarLivroDesejado(tLeitor *leitor, tLivro *livro){
-    InsereLista(leitor->desejados, livro);
+    InsereLivroLista(leitor->desejados, livro);
 }
 
 void RecomendarLivro(tLeitor *leitorOrig, int id, tLeitor *leitorDest){
     tLivro *livro;
 
-    livro = BuscaLista(leitorOrig->lidos, id);
+    livro = InfoCelulaLivro(BuscaListaLivro(leitorOrig->lidos, id));
+    //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
+    //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
+            //(n sei se vai usar elas separadas em outra parte do código)
 
-    InsereLista(leitorDest->recomendacoes, livro);
+    InsereLivroLista(leitorDest->recomendacoes, livro);
 }
 
 void AceitarRecomendacao(tLeitor *leitor, tLivro *livro, int acao){
     if(acao == TRUE){
-        InsereLista(leitor->desejados, livro);
+        InsereLivroLista(leitor->desejados, livro);
     }
 
     else{
-        RetiraLista(leitor->recomendacoes, GetIdLivro(livro));
+        RetiraListaLivro(leitor->recomendacoes, GetIdLivro(livro));
         // ATENÇÃO: FAZER O RETIRA COM O GET ID É MAIS CUSTOSO PENSAR EM FAZER UMA FUNÇÃO QUE RETIRE DE FORMA DIRETA
     }
 }
 
 void RemoverRecomendacao(tLeitor *leitor, tLivro *livro){
-    RetiraLista(leitor->recomendacoes, GetIdLivro(livro));
+    RetiraListaLivro(leitor->recomendacoes, GetIdLivro(livro));
     // ATENÇÃO: FAZER O RETIRA COM O GET ID É MAIS CUSTOSO PENSAR EM FAZER UMA FUNÇÃO QUE RETIRE DE FORMA DIRETA
 }
 
@@ -91,23 +105,28 @@ int GetIdLeitor(tLeitor *leitor){
     return leitor->id;
 }
 
+char *GetNomeLeitor(tLeitor *leitor){
+    return leitor->nome;
+}
+
 void ImprimeLeitor(tLeitor *leitor){
     printf("Leitor: %s\n", leitor->nome);
     printf("Lidos: ");
-    ImprimeLista(leitor->lidos);
+    ImprimeListaLivro(leitor->lidos);
     printf("\nDesejados: ");
-    ImprimeLista(leitor->desejados);
+    ImprimeListaLivro(leitor->desejados);
     printf("\nRecomendacoes: ");
-    ImprimeLista(leitor->recomendacoes);
+    ImprimeListaLivro(leitor->recomendacoes);
     printf("\nAfinidades: ");
-    ImprimeLista(leitor->afinidades);
+    ImprimeListaNomesLeitores(leitor->afinidades);
 }
 
 void DesalocaLeitor(tLeitor *leitor){
-    LiberaLista(leitor->afinidades);
-    LiberaLista(leitor->desejados);
-    LiberaLista(leitor->lidos);
-    LiberaLista(leitor->recomendacoes);
+    LiberaListaLivro(leitor->afinidades);
+    LiberaListaLivro(leitor->desejados);
+    LiberaListaLivro(leitor->lidos);
+    LiberaListaLivro(leitor->recomendacoes);
+    LiberaListaString(leitor->generos);
 
     free(leitor);
 }

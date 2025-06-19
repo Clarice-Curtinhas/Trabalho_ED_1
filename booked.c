@@ -99,8 +99,8 @@ int main(int argc, const char **argv){
 
     fclose(fp);
 
-    LiberaLista(leitores);
-    LiberaLista(livros);
+    LiberaListaLeitor(leitores);
+    LiberaListaLivro(livros);
 
     return 0;
 }
@@ -114,20 +114,32 @@ int main(int argc, const char **argv){
 */
 void LerLeitores(tLista *leitores, FILE *fp){
     tLeitor *leitor;
-    int id, n;
-    char nome[100], afinidade[100];
+    int id, n, qntLeitores = 0;
+    char nome[100], genero[100];
 
-    while(fscanf(fp, "%d;%99[^;];%d", &id, nome, &n) == 3){
+    while(fscanf(fp, "%d;%99[^;];%d;", &id, nome, &n) == 3){
 
         leitor = CriaLeitor(nome, id);
 
-        for(int i = 0; i < n; i++){
-            fscanf(fp, "%99[^\n]", afinidade);
-            //AdicionarAfinidade(leitor, afinidade);
+       for(int i = 0; i < n; i++){
+            if(i != n-1) fscanf(fp, "%99[^;];", genero);
+            else fscanf(fp, "%99[^\n]", genero);
+            AdicionarGenero(leitor, genero);
         }
 
-        InsereLista(leitores, leitor);
+        InsereLeitorLista(leitores, leitor);
+        qntLeitores++;
     }
+
+
+    for(int i = 1; i <= qntLeitores; i++){
+
+        for(int j = i+1; j <= qntLeitores; j++){
+            AssociaLeitores(InfoCelulaLeitor(BuscaListaLeitor(leitores, i)), InfoCelulaLeitor(BuscaListaLeitor(leitores, j)));
+        }
+    }
+
+    ImprimeListaLeitor(leitores);
 }
 
 /*
@@ -145,9 +157,10 @@ void LerLivros(tLista *livros, FILE *fp){
     while(fscanf(fp, "%d;%99[^;];%99[^;];%99[^;];%d", &id, titulo, autor, genero, &ano) == 5){
 
         livro = CadastraLivro(id, titulo, autor, genero, ano);
-
-        InsereLista(livros, livro);
+        InsereLivroLista(livros, livro);
     }
+
+    ImprimeListaLivro(livros);
 }
 
 /*
@@ -161,6 +174,104 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp){
     int func, id1, id2, id3;
 
     while(fscanf(fp, "%d;%d;%d;%d", &func, &id1, &id2, &id3) == 4){
-        return;
+        printf("%d; %d; %d; %d\n", func, id1, id2, id3);
+
+        if(func == 1){
+            tLeitor *leitor;
+            tLivro *livro;
+
+            leitor = InfoCelulaLeitor(BuscaListaLeitor(leitores, id1));
+            livro = InfoCelulaLivro(BuscaListaLivro(livros, id2));
+            //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
+            //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
+            //(n sei se vai usar elas separadas em outra parte do código)
+
+            AdicionarLivroLido(leitor, livro);
+        }
+
+        else if(func == 2){
+            tLeitor *leitor;
+            tLivro *livro;
+
+            leitor = InfoCelulaLeitor(BuscaListaLeitor(leitores, id1));
+            livro = InfoCelulaLivro(BuscaListaLivro(livros, id2));
+            //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
+            //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
+            //(n sei se vai usar elas separadas em outra parte do código)
+
+            AdicionarLivroDesejado(leitor, livro);
+        }
+
+        else if(func == 3){
+            tLeitor *leitorOrig, *leitorDest;
+
+            leitorOrig = InfoCelulaLeitor(BuscaListaLeitor(leitores, id1));
+            leitorDest = InfoCelulaLeitor(BuscaListaLeitor(leitores, id3));
+            //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
+            //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
+            //(n sei se vai usar elas separadas em outra parte do código)
+
+            //RecomendarLivro(leitorOrig, id2, leitorDest);
+        }
+
+        else if(func == 4){
+            tLeitor *leitorOrig, *leitorDest;
+            tLivro *livro;
+
+            livro = InfoCelulaLivro(BuscaListaLivro(livros, id2));
+
+            leitorOrig = InfoCelulaLeitor(BuscaListaLeitor(leitores, id1));
+            leitorDest = InfoCelulaLeitor(BuscaListaLeitor(leitores, id3));
+            //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
+            //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
+            //(n sei se vai usar elas separadas em outra parte do código)
+
+            //AceitarRecomendacao(leitorOrig, livro, TRUE);
+        }
+
+        else if(func == 5){
+            tLeitor *leitorOrig, *leitorDest;
+            tLivro *livro;
+
+            livro = InfoCelulaLivro(BuscaListaLivro(livros, id2));
+
+            leitorOrig = InfoCelulaLeitor(BuscaListaLeitor(leitores, id1));
+            leitorDest = InfoCelulaLeitor(BuscaListaLeitor(leitores, id3));
+            //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
+            //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
+            //(n sei se vai usar elas separadas em outra parte do código)
+
+            //AceitarRecomendacao(leitorOrig, livro, FALSE);
+        }
+
+        else if(func == 7){
+            tLivro *livro;
+            tLeitor *leitorOrig, *leitorDest;
+
+            leitorOrig = InfoCelulaLeitor(BuscaListaLeitor(leitores, id1));
+            leitorDest = InfoCelulaLeitor(BuscaListaLeitor(leitores, id3));
+            //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
+            //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
+            //(n sei se vai usar elas separadas em outra parte do código)
+
+            //livro = ProcuraLivroEmComum(leitorOrig, leitorDest);
+        }
+
+        else if(func == 7){
+            int temAfinidade;
+            tLeitor *leitorOrig, *leitorDest;
+
+            leitorOrig = InfoCelulaLeitor(BuscaListaLeitor(leitores, id1));
+            leitorDest = InfoCelulaLeitor(BuscaListaLeitor(leitores, id3));
+            //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
+            //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
+            //(n sei se vai usar elas separadas em outra parte do código)
+
+            //temAfinidade = VerificaAfinidade(leitorOrig, leitorDest);
+        }
+
+        else if(func == 8){
+            ImprimeListaLeitor(leitores);
+        }
     }
 }
