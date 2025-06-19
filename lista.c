@@ -114,6 +114,48 @@ void InsereLivroLista(tLista *lista, tLivro *livro){
 }
 
 /*
+ * Busca um leitor na lista indicada.
+ * Inputs: ponteiro para a lista, leitor a ser procurado
+ * Outputs: nenhum
+ * Pre-condicao: a lista e o leitor existem (estão alocados)
+ * Pos-condicao: se o litor foi encontrado, retorna o ponteiro para ele, se não, retorna NULL
+*/
+int ProcuraCelulaLeitor(tLista *lista, tLeitor *leitor2){
+   tCelula *aux, *ajud;
+   aux = lista->prim;
+
+   while(aux != NULL){
+      if (aux->info == leitor2){
+         return 1;
+      }
+      aux = aux->prox;
+   }
+
+   return 0;
+}
+
+/*
+ * Busca um leitor diferente do que já está sendo usado na lista indicada.
+ * Inputs: ponteiro para a lista, leitor usado
+ * Outputs: nenhum
+ * Pre-condicao: a lista e o leitor existem (estão alocados)
+ * Pos-condicao: se um leitor diferente for encontrado, retorna o ponteiro para ele, se não, retorna o leitor antigo
+*/
+tLeitor *RetornaCelulaDiferente(tLista *lista, tLeitor *leitor){
+   tCelula *aux, *ajud;
+   aux = lista->prim;
+
+   while(aux != NULL){
+      if (aux->info != leitor){
+         return (tLeitor*)aux->info;
+      }
+      aux = aux->prox;
+   }
+
+   return leitor;
+}
+
+/*
  * Compara as informações de duas listas de strings, para ver se existe uma info igual.
  * Inputs: ponteiro para a primrira lista e para a segunda lista que vão ser comparadas.
  * Outputs: 1 caso eles tenham informações que se repetem e 0, caso contrário.
@@ -202,6 +244,25 @@ tCelula *BuscaListaLivro(tLista *lista, int id){
 */
 tLivro *InfoCelulaLivro(tCelula *cel){
    return cel->info;
+}
+
+/*
+ * Compara as informações de duas listas, para ver se existe uma info igual.
+ * Inputs: ponteiro para a primrira lista e para a segunda lista que vão ser comparadas.
+ * Outputs: a informação, caso eles tenham informações que se repetem e NULL, caso contrário.
+ * Pre-condicao: as listas existem (estão alocados)
+ * Pos-condicao: se a informação foi encontrado ou não, retorna a própria info ou NULL, respectivamente
+*/
+tLivro *ProcuraCelulaEmComum(tLista *lista1, tLista *lista2){
+   tCelula *aux, *ajud;
+
+   for(aux = lista1->prim; aux != NULL; aux = aux->prox){
+      for(ajud = lista2->prim; ajud != NULL; ajud = ajud->prox){
+         if((tLivro*)aux->info == (tLivro*)ajud->info) return (tLivro*)aux->info;
+      }
+   }
+
+   return NULL;
 }
 
 /*
@@ -305,14 +366,14 @@ void RetiraListaLivro(tLista *lista, int id){
  * Pre-condicao: a lista existe (está alocada)
  * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
 */
-void ImprimeListaLeitor(tLista *lista){
+void ImprimeListaLeitor(tLista *lista, FILE *saida){
    tCelula *aux;
    aux = lista->prim;
 
    while(aux != NULL){
-      ImprimeLeitor(aux->info);
+      ImprimeLeitor(aux->info, saida);
       aux = aux->prox;
-      printf("\n\n");
+      fprintf(saida, "\n\n");
    }
 }
 
@@ -323,16 +384,16 @@ void ImprimeListaLeitor(tLista *lista){
  * Pre-condicao: a lista existe (está alocada)
  * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
 */
-void ImprimeListaNomesLeitores(tLista *lista){
+void ImprimeListaNomesLeitores(tLista *lista, FILE *saida){
    tCelula *aux;
    int start = 0;
 
    aux = lista->prim;
 
    while(aux != NULL){
-      if(start == 1) printf(", ");
+      if(start == 1) fprintf(saida, ", ");
 
-      printf("%s", GetNomeLeitor(aux->info));
+      fprintf(saida, "%s", GetNomeLeitor(aux->info));
       aux = aux->prox;
 
       start = 1;
@@ -346,16 +407,16 @@ void ImprimeListaNomesLeitores(tLista *lista){
  * Pre-condicao: a lista existe (está alocada)
  * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
 */
-void ImprimeListaLivro(tLista *lista){
+void ImprimeListaLivro(tLista *lista, FILE *saida){
    tCelula *aux;
    int start = 0;
 
    aux = lista->prim;
 
    while(aux != NULL){
-      if(start == 1) printf(", ");
+      if(start == 1) fprintf(saida, ", ");
 
-      printf("%s", GetNomeLivro(aux->info));
+      fprintf(saida, "%s", GetNomeLivro(aux->info));
       aux = aux->prox;
       start = 1;
    }

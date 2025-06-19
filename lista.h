@@ -54,6 +54,24 @@ void InsereLeitorLista(tLista *lista, tLeitor *leitor);
 void InsereLivroLista(tLista *lista, tLivro *livro);
 
 /*
+ * Busca um leitor na lista indicada.
+ * Inputs: ponteiro para a lista, leitor a ser procurado
+ * Outputs: nenhum
+ * Pre-condicao: a lista e o leitor existem (estão alocados)
+ * Pos-condicao: se o litor foi encontrado, retorna o ponteiro para ele, se não, retorna NULL
+*/
+int ProcuraCelulaLeitor(tLista *lista, tLeitor *leitor2);
+
+/*
+ * Busca um leitor diferente do que já está sendo usado na lista indicada.
+ * Inputs: ponteiro para a lista, leitor usado
+ * Outputs: nenhum
+ * Pre-condicao: a lista e o leitor existem (estão alocados)
+ * Pos-condicao: se um leitor diferente for encontrado, retorna o ponteiro para ele, se não, retorna o leitor antigo
+*/
+tLeitor *RetornaCelulaDiferente(tLista *lista, tLeitor *leitor);
+
+/*
  * Compara as informações de duas listas de strings, para ver se existe uma info igual.
  * Inputs: ponteiro para a primrira lista e para a segunda lista que vão ser comparadas.
  * Outputs: 1 caso eles tenham informações que se repetem e 0, caso contrário.
@@ -99,6 +117,15 @@ tCelula *BuscaListaLivro(tLista *lista, int id);
 tLivro *InfoCelulaLivro(tCelula *cel);
 
 /*
+ * Compara as informações de duas listas, para ver se existe uma info igual.
+ * Inputs: ponteiro para a primrira lista e para a segunda lista que vão ser comparadas.
+ * Outputs: a informação, caso eles tenham informações que se repetem e NULL, caso contrário.
+ * Pre-condicao: as listas existem (estão alocados)
+ * Pos-condicao: se a informação foi encontrado ou não, retorna a própria info ou NULL, respectivamente
+*/
+tLivro *ProcuraCelulaEmComum(tLista *lista1, tLista *lista2);
+
+/*
  * Retira um leitor da lista indicada.
  * Inputs: ponteiro para a lista, ID do leitor a ser procurado
  * Outputs: nenhum
@@ -123,7 +150,7 @@ void RetiraListaLivro(tLista *lista, int id);
  * Pre-condicao: a lista existe (está alocada)
  * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
 */
-void ImprimeListaLeitor(tLista *lista);
+void ImprimeListaLeitor(tLista *lista, FILE *saida);
 
 
 /*
@@ -133,7 +160,7 @@ void ImprimeListaLeitor(tLista *lista);
  * Pre-condicao: a lista existe (está alocada)
  * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
 */
-void ImprimeListaNomesLeitores(tLista *lista);
+void ImprimeListaNomesLeitores(tLista *lista, FILE *saida);
 
 /*
  * Imprime uma lista de livros.
@@ -142,7 +169,7 @@ void ImprimeListaNomesLeitores(tLista *lista);
  * Pre-condicao: a lista existe (está alocada)
  * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
 */
-void ImprimeListaLivro(tLista *lista);
+void ImprimeListaLivro(tLista *lista, FILE *saida);
 
 /*
  * Imprime uma lista de strings.

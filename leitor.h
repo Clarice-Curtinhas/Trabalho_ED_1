@@ -31,11 +31,9 @@ void AdicionarLivroLido(tLeitor *leitor, tLivro *livro);
 
 void AdicionarLivroDesejado(tLeitor *leitor, tLivro *livro);
 
-void RecomendarLivro(tLeitor *leitorOrig, int id, tLeitor *leitorDest);
+void RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor);
 
 void AceitarRecomendacao(tLeitor *leitorOrig, tLivro *livro, int acao);
-
-void RemoverRecomendacao(tLeitor *leitor, tLivro *livro);
 
 tLivro *ProcuraLivroEmComum(tLeitor *leitor1, tLeitor *leitor2);
 
@@ -45,7 +43,7 @@ int GetIdLeitor(tLeitor *leitor);
 
 char *GetNomeLeitor(tLeitor *leitor);
 
-void ImprimeLeitor(tLeitor *leitor);
+void ImprimeLeitor(tLeitor *leitor, FILE *saida);
 
 void DesalocaLeitor(tLeitor *leitor);
 

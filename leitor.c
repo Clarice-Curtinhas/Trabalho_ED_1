@@ -64,20 +64,14 @@ void AdicionarLivroDesejado(tLeitor *leitor, tLivro *livro){
     InsereLivroLista(leitor->desejados, livro);
 }
 
-void RecomendarLivro(tLeitor *leitorOrig, int id, tLeitor *leitorDest){
-    tLivro *livro;
-
-    livro = InfoCelulaLivro(BuscaListaLivro(leitorOrig->lidos, id));
-    //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
-    //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
-            //(n sei se vai usar elas separadas em outra parte do código)
-
-    InsereLivroLista(leitorDest->recomendacoes, livro);
+void RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor){
+    InsereLivroLista(leitor->recomendacoes, livro);
 }
 
 void AceitarRecomendacao(tLeitor *leitor, tLivro *livro, int acao){
     if(acao == TRUE){
         InsereLivroLista(leitor->desejados, livro);
+        RetiraListaLivro(leitor->recomendacoes, GetIdLivro(livro));
     }
 
     else{
@@ -86,20 +80,32 @@ void AceitarRecomendacao(tLeitor *leitor, tLivro *livro, int acao){
     }
 }
 
-void RemoverRecomendacao(tLeitor *leitor, tLivro *livro){
-    RetiraListaLivro(leitor->recomendacoes, GetIdLivro(livro));
-    // ATENÇÃO: FAZER O RETIRA COM O GET ID É MAIS CUSTOSO PENSAR EM FAZER UMA FUNÇÃO QUE RETIRE DE FORMA DIRETA
-}
-
 tLivro *ProcuraLivroEmComum(tLeitor *leitor1, tLeitor *leitor2){
-    /*tLivro *livro;
+    tLivro *livro;
 
     livro = ProcuraCelulaEmComum(leitor1->lidos, leitor2->lidos);
 
-    return livro;*/
+    return livro;
 }
 
-int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2);
+int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2){
+    tLeitor *aux, *ant;
+
+    if(ProcuraCelulaLeitor(leitor1->afinidades, leitor2) == TRUE) return TRUE;
+
+    aux = RetornaCelulaDiferente(leitor1->afinidades, leitor1);
+
+    while(aux != leitor1){
+        ant = aux;
+
+        if(ProcuraCelulaLeitor(aux->afinidades, leitor2) == TRUE) return TRUE;
+
+        aux = RetornaCelulaDiferente(aux->afinidades, aux);
+        if(aux == ant) break;
+    }
+
+    return FALSE;
+}
 
 int GetIdLeitor(tLeitor *leitor){
     return leitor->id;
@@ -109,16 +115,16 @@ char *GetNomeLeitor(tLeitor *leitor){
     return leitor->nome;
 }
 
-void ImprimeLeitor(tLeitor *leitor){
-    printf("Leitor: %s\n", leitor->nome);
-    printf("Lidos: ");
-    ImprimeListaLivro(leitor->lidos);
-    printf("\nDesejados: ");
-    ImprimeListaLivro(leitor->desejados);
-    printf("\nRecomendacoes: ");
-    ImprimeListaLivro(leitor->recomendacoes);
-    printf("\nAfinidades: ");
-    ImprimeListaNomesLeitores(leitor->afinidades);
+void ImprimeLeitor(tLeitor *leitor, FILE *saida){
+    fprintf(saida, "Leitor: %s\n", leitor->nome);
+    fprintf(saida, "Lidos: ");
+    ImprimeListaLivro(leitor->lidos, saida);
+    fprintf(saida, "\nDesejados: ");
+    ImprimeListaLivro(leitor->desejados, saida);
+    fprintf(saida, "\nRecomendacoes: ");
+    ImprimeListaLivro(leitor->recomendacoes, saida);
+    fprintf(saida, "\nAfinidades: ");
+    ImprimeListaNomesLeitores(leitor->afinidades, saida);
 }
 
 void DesalocaLeitor(tLeitor *leitor){

@@ -34,7 +34,7 @@ void LerLivros(tLista *livros, FILE *fp);
  * Pre-condicao: um FILE *fp com os comandos ordenados
  * Pos-condicao: nenhum
 */
-void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp);
+void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida);
 
 /*
  * Inicializa e executa o programa com os arquivos de inicialização
@@ -54,7 +54,7 @@ int main(int argc, const char **argv){
         return 1;
     }    
 
-    FILE *fp;
+    FILE *fp, *saida;
     char diretorio[100];
 
     strcpy(diretorio, argv[1]);
@@ -90,14 +90,28 @@ int main(int argc, const char **argv){
 
     fp = fopen(diretorio, "r");
 
+    strcpy(diretorio, argv[1]);
+    strcat(diretorio, "/saida.txt");
+
+    saida = fopen(diretorio, "w");
+
     if(fp == NULL){
         printf("ERRO: nao foi possivel abrir o arquivo 'comandos.txt'.\n");
         exit(1);
     }
 
-    else ExecutarComandos(leitores, livros, fp);
+    else if(saida == NULL){
+        printf("ERRO: nao foi possivel abrir o arquivo 'saida.txt'.\n");
+        exit(1);
+    }
+
+    else ExecutarComandos(leitores, livros, fp, saida);
 
     fclose(fp);
+    fclose(saida);
+
+    printf("FALHA DE SEGMENTACAO ACONTECENDO NA LIBERACAO DAS LISTAS\n");
+    printf("provavelmente esta acontecendo porque a gnt esta liberando filas interconectadas, tipo a gnt tira uma coisa da lista de leitores e ela desaparece da de livros\n");
 
     LiberaListaLeitor(leitores);
     LiberaListaLivro(livros);
@@ -138,8 +152,6 @@ void LerLeitores(tLista *leitores, FILE *fp){
             AssociaLeitores(InfoCelulaLeitor(BuscaListaLeitor(leitores, i)), InfoCelulaLeitor(BuscaListaLeitor(leitores, j)));
         }
     }
-
-    ImprimeListaLeitor(leitores);
 }
 
 /*
@@ -159,8 +171,6 @@ void LerLivros(tLista *livros, FILE *fp){
         livro = CadastraLivro(id, titulo, autor, genero, ano);
         InsereLivroLista(livros, livro);
     }
-
-    ImprimeListaLivro(livros);
 }
 
 /*
@@ -170,12 +180,10 @@ void LerLivros(tLista *livros, FILE *fp){
  * Pre-condicao: um FILE *fp com os comandos ordenados
  * Pos-condicao: nenhum
 */
-void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp){
+void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
     int func, id1, id2, id3;
 
     while(fscanf(fp, "%d;%d;%d;%d", &func, &id1, &id2, &id3) == 4){
-        printf("%d; %d; %d; %d\n", func, id1, id2, id3);
-
         if(func == 1){
             tLeitor *leitor;
             tLivro *livro;
@@ -187,6 +195,7 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp){
             //(n sei se vai usar elas separadas em outra parte do código)
 
             AdicionarLivroLido(leitor, livro);
+            fprintf(saida, "%s leu \"%s\"\n", GetNomeLeitor(leitor), GetNomeLivro(livro));
         }
 
         else if(func == 2){
@@ -200,18 +209,23 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp){
             //(n sei se vai usar elas separadas em outra parte do código)
 
             AdicionarLivroDesejado(leitor, livro);
+            fprintf(saida, "%s deseja ler \"%s\"\n", GetNomeLeitor(leitor), GetNomeLivro(livro));
         }
 
         else if(func == 3){
             tLeitor *leitorOrig, *leitorDest;
+            tLivro *livro;
 
             leitorOrig = InfoCelulaLeitor(BuscaListaLeitor(leitores, id1));
             leitorDest = InfoCelulaLeitor(BuscaListaLeitor(leitores, id3));
+            livro = InfoCelulaLivro(BuscaListaLivro(livros, id2));
             //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
 
-            //RecomendarLivro(leitorOrig, id2, leitorDest);
+            if(leitorOrig != NULL && leitorDest != NULL) RecebeRecomendacaoLivro(livro, leitorDest);
+
+            fprintf(saida, "%s recomenda \"%s\" para %s\n", GetNomeLeitor(leitorOrig), GetNomeLivro(livro), GetNomeLeitor(leitorDest));
         }
 
         else if(func == 4){
@@ -226,7 +240,8 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp){
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
 
-            //AceitarRecomendacao(leitorOrig, livro, TRUE);
+            AceitarRecomendacao(leitorOrig, livro, TRUE);
+            fprintf(saida, "%s aceita recomendação \"%s\" de %s\n", GetNomeLeitor(leitorOrig), GetNomeLivro(livro), GetNomeLeitor(leitorDest));
         }
 
         else if(func == 5){
@@ -241,10 +256,11 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp){
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
 
-            //AceitarRecomendacao(leitorOrig, livro, FALSE);
+            AceitarRecomendacao(leitorOrig, livro, FALSE);
+            fprintf(saida, "%s rejeita recomendação \"%s\" de %s\n", GetNomeLeitor(leitorOrig), GetNomeLivro(livro), GetNomeLeitor(leitorDest));
         }
 
-        else if(func == 7){
+        else if(func == 6){
             tLivro *livro;
             tLeitor *leitorOrig, *leitorDest;
 
@@ -254,7 +270,10 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp){
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
 
-            //livro = ProcuraLivroEmComum(leitorOrig, leitorDest);
+            livro = ProcuraLivroEmComum(leitorOrig, leitorDest);
+
+            if(livro != NULL) fprintf(saida, "Livros em comum entre %s e %s: %s\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest), GetNomeLivro(livro));
+            else fprintf(saida, "Livros em comum entre %s e %s: Nenhum livro em comum\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));
         }
 
         else if(func == 7){
@@ -267,11 +286,15 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp){
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
 
-            //temAfinidade = VerificaAfinidade(leitorOrig, leitorDest);
+            temAfinidade = VerificaAfinidade(leitorOrig, leitorDest);
+
+            if(temAfinidade == TRUE) fprintf(saida, "Existe afinidade entre %s e %s\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));
+            else fprintf(saida, "Não existe afinidade entre %s e %s\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));
         }
 
         else if(func == 8){
-            ImprimeListaLeitor(leitores);
+            fprintf(saida, "Imprime toda a BookED\n\n");
+            ImprimeListaLeitor(leitores, saida);
         }
     }
 }
