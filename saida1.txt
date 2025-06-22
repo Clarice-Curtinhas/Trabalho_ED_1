@@ -1,0 +1,90 @@
+Marcus leu "O Cortiço"
+Marcus leu "O Xangô de Baker Street"
+Marcus leu "Senhora"
+Lucius leu "A Hora da Estrela"
+Lucius leu "O Caso da Estranha Fotografia"
+Lucius leu "Iracema"
+Julia leu "Agosto"
+Julia leu "A Moreninha"
+Julia leu "Incidente em Antares"
+Gaius leu "A Grande Arte"
+Gaius leu "Os Sertões"
+Gaius leu "Nós"
+Claudia leu "O Cortiço"
+Claudia leu "O Xangô de Baker Street"
+Claudia leu "Senhora"
+Livia leu "A Hora da Estrela"
+Livia leu "O Caso da Estranha Fotografia"
+Marcus deseja ler "Agosto"
+Marcus deseja ler "A Moreninha"
+Marcus deseja ler "Incidente em Antares"
+Lucius deseja ler "A Grande Arte"
+Lucius deseja ler "Os Sertões"
+Lucius deseja ler "Nós"
+Julia deseja ler "O Cortiço"
+Julia deseja ler "O Xangô de Baker Street"
+Gaius deseja ler "Agosto"
+Gaius deseja ler "A Moreninha"
+Claudia deseja ler "Incidente em Antares"
+Claudia deseja ler "A Grande Arte"
+Livia deseja ler "Os Sertões"
+Livia deseja ler "Nós"
+Livros em comum entre Marcus e Gaius: Nenhum livro em comum
+Livros em comum entre Marcus e Lucius: Nenhum livro em comum
+Livros em comum entre Lucius e Julia: Nenhum livro em comum
+Livros em comum entre Marcus e Claudia: Senhora
+Marcus leu "O Cortiço"
+Lucius leu "A Hora da Estrela"
+Julia leu "Agosto"
+Marcus deseja ler "Agosto"
+Lucius deseja ler "A Grande Arte"
+Julia deseja ler "O Cortiço"
+Marcus recomenda "A Hora da Estrela" para Marcus
+Lucius recomenda "Senhora" para Gaius
+Claudia recomenda "Iracema" para Lucius
+Marcus aceita recomendação "A Hora da Estrela" de Marcus
+Gaius aceita recomendação "Senhora" de Lucius
+Lucius aceita recomendação "Iracema" de Claudia
+Marcus recomenda "A Hora da Estrela" para Lucius
+Lucius rejeita recomendação "A Hora da Estrela" de Marcus
+Livros em comum entre Marcus e Gaius: Nenhum livro em comum
+Livros em comum entre Lucius e Julia: Nenhum livro em comum
+Livros em comum entre Claudia e Livia: Nenhum livro em comum
+Imprime toda a BookED
+
+Leitor: Livia
+Lidos: O Caso da Estranha Fotografia, A Hora da Estrela
+Desejados: Nós, Os Sertões
+Recomendacoes: 
+Afinidades: 
+
+Leitor: Claudia
+Lidos: Senhora, O Xangô de Baker Street, O Cortiço
+Desejados: A Grande Arte, Incidente em Antares
+Recomendacoes: 
+Afinidades: Julia, Lucius
+
+Leitor: Gaius
+Lidos: Nós, Os Sertões, A Grande Arte
+Desejados: Senhora, A Moreninha, Agosto
+Recomendacoes: 
+Afinidades: Lucius, Marcus
+
+Leitor: Julia
+Lidos: Agosto, Incidente em Antares, A Moreninha, Agosto
+Desejados: O Cortiço, O Xangô de Baker Street, O Cortiço
+Recomendacoes: 
+Afinidades: Claudia, Lucius
+
+Leitor: Lucius
+Lidos: A Hora da Estrela, Iracema, O Caso da Estranha Fotografia, A Hora da Estrela
+Desejados: Iracema, A Grande Arte, Nós, Os Sertões, A Grande Arte
+Recomendacoes: 
+Afinidades: Claudia, Gaius, Julia
+
+Leitor: Marcus
+Lidos: O Cortiço, Senhora, O Xangô de Baker Street, O Cortiço
+Desejados: A Hora da Estrela, Agosto, Incidente em Antares, A Moreninha, Agosto
+Recomendacoes: 
+Afinidades: Gaius
+

@@ -207,7 +207,8 @@ tCelula *BuscaListaLeitor(tLista *lista, int id){
  * Pos-condicao: a informação dentro da celula
 */
 tLeitor *InfoCelulaLeitor(tCelula *cel){
-   return cel->info;
+   if(cel != NULL) return cel->info;
+   else return NULL;
 }
 
 /*
@@ -243,7 +244,8 @@ tCelula *BuscaListaLivro(tLista *lista, int id){
  * Pos-condicao: a informação dentro da celula
 */
 tLivro *InfoCelulaLivro(tCelula *cel){
-   return cel->info;
+   if(cel != NULL) return cel->info;
+   else return NULL;
 }
 
 /*
@@ -353,9 +355,8 @@ void RetiraListaLivro(tLista *lista, int id){
          aux->ant->prox = aux->prox;
          aux->prox->ant = aux->ant;
       }
-      
-      //return aux; // talvez a gnt deva usar um return para caso precisarmos desse livro;
-      //free(aux); // comentei para podermos usar um livro mais de uma vez, se vc da um free aqui ela para de existir em outras listas
+
+      free(aux);
    }
 }
 
@@ -368,11 +369,11 @@ void RetiraListaLivro(tLista *lista, int id){
 */
 void ImprimeListaLeitor(tLista *lista, FILE *saida){
    tCelula *aux;
-   aux = lista->prim;
+   aux = lista->ult;
 
    while(aux != NULL){
       ImprimeLeitor(aux->info, saida);
-      aux = aux->prox;
+      aux = aux->ant;
       fprintf(saida, "\n\n");
    }
 }
@@ -388,13 +389,13 @@ void ImprimeListaNomesLeitores(tLista *lista, FILE *saida){
    tCelula *aux;
    int start = 0;
 
-   aux = lista->prim;
+   aux = lista->ult;
 
    while(aux != NULL){
       if(start == 1) fprintf(saida, ", ");
 
       fprintf(saida, "%s", GetNomeLeitor(aux->info));
-      aux = aux->prox;
+      aux = aux->ant;
 
       start = 1;
    }
@@ -411,13 +412,13 @@ void ImprimeListaLivro(tLista *lista, FILE *saida){
    tCelula *aux;
    int start = 0;
 
-   aux = lista->prim;
+   aux = lista->ult;
 
    while(aux != NULL){
       if(start == 1) fprintf(saida, ", ");
 
       fprintf(saida, "%s", GetNomeLivro(aux->info));
-      aux = aux->prox;
+      aux = aux->ant;
       start = 1;
    }
 }
@@ -450,7 +451,7 @@ void LiberaListaString(tLista *lista){
    tCelula *aux;
    aux = lista->prim;
 
-   if (lista != NULL){
+   if (lista != NULL && aux != NULL){
 
       while(1){
          free(aux->info);
@@ -466,6 +467,36 @@ void LiberaListaString(tLista *lista){
          }
       }
    }
+
+   free(lista);
+}
+
+/*
+ * Libera a memória de uma lista de celulas.
+ * Inputs: ponteiro para a lista
+ * Outputs: nenhum
+ * Pre-condicao: a lista existe (está alocada)
+ * Pos-condicao: memórias da lista e dos seus elementos liberadas
+*/
+void LiberaCelulas(tLista *lista){
+   tCelula *aux;
+   aux = lista->prim;
+
+   if (lista != NULL && aux != NULL){
+      while(1){      
+         if (aux->prox != NULL){
+            aux = aux->prox;
+            free(aux->ant);
+         }
+
+         else {
+            free(aux);
+            break;
+         }
+      }
+   }
+
+   free(lista);
 }
 
 /*
@@ -479,7 +510,7 @@ void LiberaListaLeitor(tLista *lista){
    tCelula *aux;
    aux = lista->prim;
 
-   if (lista != NULL){
+   if (lista != NULL && aux != NULL){
 
       while(1){
          DesalocaLeitor(aux->info);
@@ -495,6 +526,8 @@ void LiberaListaLeitor(tLista *lista){
          }
       }
    }
+
+   free(lista);
 }
 
 /*
@@ -508,7 +541,7 @@ void LiberaListaLivro(tLista *lista){
    tCelula *aux;
    aux = lista->prim;
 
-   if (lista != NULL){
+   if (lista != NULL && aux != NULL){
 
       while(1){
          LiberaLivro(aux->info);
@@ -524,4 +557,6 @@ void LiberaListaLivro(tLista *lista){
          }
       }
    }
+
+   free(lista);
 }

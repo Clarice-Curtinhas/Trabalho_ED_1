@@ -190,6 +190,15 @@ void ImprimeListaStrings(tLista *lista);
 void LiberaListaString(tLista *lista);
 
 /*
+ * Libera a memória de uma lista de celulas.
+ * Inputs: ponteiro para a lista
+ * Outputs: nenhum
+ * Pre-condicao: a lista existe (está alocada)
+ * Pos-condicao: memórias da lista e dos seus elementos liberadas
+*/
+void LiberaCelulas(tLista *lista);
+
+/*
  * Libera a memória de uma lista de leitores.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum

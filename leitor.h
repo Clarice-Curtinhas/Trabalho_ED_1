@@ -31,7 +31,9 @@ void AdicionarLivroLido(tLeitor *leitor, tLivro *livro);
 
 void AdicionarLivroDesejado(tLeitor *leitor, tLivro *livro);
 
-void RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor);
+int RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor);
+
+int LivroExisteNosDadosDoLeitor(tLeitor *leitor, int id, int lista);
 
 void AceitarRecomendacao(tLeitor *leitorOrig, tLivro *livro, int acao);
 
@@ -47,4 +49,4 @@ void ImprimeLeitor(tLeitor *leitor, FILE *saida);
 
 void DesalocaLeitor(tLeitor *leitor);
 
- #endif
+#endif

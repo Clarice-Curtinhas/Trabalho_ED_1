@@ -64,8 +64,26 @@ void AdicionarLivroDesejado(tLeitor *leitor, tLivro *livro){
     InsereLivroLista(leitor->desejados, livro);
 }
 
-void RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor){
-    InsereLivroLista(leitor->recomendacoes, livro);
+int RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor){
+    if(BuscaListaLivro(leitor->lidos, GetIdLivro(livro)) != NULL) return 1;
+
+    else{
+        InsereLivroLista(leitor->recomendacoes, livro);
+        return 0;
+    }
+}
+
+int LivroExisteNosDadosDoLeitor(tLeitor *leitor, int id, int lista){
+    tLivro *livro;
+
+    if(lista == 1) livro = InfoCelulaLivro(BuscaListaLivro(leitor->lidos, id));
+    else if(lista == 2) livro = InfoCelulaLivro(BuscaListaLivro(leitor->desejados, id));
+    else if(lista == 3) livro = InfoCelulaLivro(BuscaListaLivro(leitor->recomendacoes, id));
+
+    if(livro != NULL){
+        return TRUE;
+    }
+    else return FALSE;
 }
 
 void AceitarRecomendacao(tLeitor *leitor, tLivro *livro, int acao){
@@ -128,11 +146,12 @@ void ImprimeLeitor(tLeitor *leitor, FILE *saida){
 }
 
 void DesalocaLeitor(tLeitor *leitor){
-    LiberaListaLivro(leitor->afinidades);
-    LiberaListaLivro(leitor->desejados);
-    LiberaListaLivro(leitor->lidos);
-    LiberaListaLivro(leitor->recomendacoes);
+    LiberaCelulas(leitor->lidos);
+    LiberaCelulas(leitor->desejados);
+    LiberaCelulas(leitor->recomendacoes);
     LiberaListaString(leitor->generos);
+    LiberaCelulas(leitor->afinidades);
 
+    free(leitor->nome);
     free(leitor);
 }
