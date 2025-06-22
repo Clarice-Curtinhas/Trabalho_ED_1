@@ -41,6 +41,8 @@ tLivro *ProcuraLivroEmComum(tLeitor *leitor1, tLeitor *leitor2);
 
 int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2);
 
+//tLista *GetAfinidades(tLeitor *leitor);
+
 int GetIdLeitor(tLeitor *leitor);
 
 char *GetNomeLeitor(tLeitor *leitor);

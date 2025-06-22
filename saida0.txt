@@ -16,24 +16,24 @@ Livros em comum entre Alice e Bob: Garota Exemplar
 Livros em comum entre Alice e Clara: Nenhum livro em comum
 Livros em comum entre Bob e Clara: Nenhum livro em comum
 Existe afinidade entre Bob e Clara
-Não existe afinidade entre Alice e Clara
+Existe afinidade entre Alice e Clara
 Imprime toda a BookED
 
-Leitor: Clara
-Lidos: Drácula
-Desejados: O Senhor dos Anéis: A Sociedade do Anel, Assassinato no Expresso Oriente
+Leitor: Alice
+Lidos: O Iluminado, Garota Exemplar
+Desejados: Orgulho e Preconceito
 Recomendacoes: 
 Afinidades: Bob
 
 Leitor: Bob
-Lidos: Garota Exemplar, O Nome da Rosa
+Lidos: O Nome da Rosa, Garota Exemplar
 Desejados: Drácula
-Recomendacoes: A Culpa é das Estrelas, O Iluminado
-Afinidades: Clara
+Recomendacoes: O Iluminado, A Culpa é das Estrelas
+Afinidades: Alice, Clara
 
-Leitor: Alice
-Lidos: Garota Exemplar, O Iluminado
-Desejados: Orgulho e Preconceito
+Leitor: Clara
+Lidos: Drácula
+Desejados: Assassinato no Expresso Oriente, O Senhor dos Anéis: A Sociedade do Anel
 Recomendacoes: 
-Afinidades: 
+Afinidades: Bob
 

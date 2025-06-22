@@ -1,5 +1,5 @@
 Id;nome;n_afinidades; afinidades
-1;Marcus;2;Romance; Terror
+1;Marcus;2;Romance;Terror
 2;Lucius;2;Terror;Mistério
 3;Julia;1;Mistério
 4;Gaius;2;Romance;Terror

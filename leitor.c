@@ -107,23 +107,37 @@ tLivro *ProcuraLivroEmComum(tLeitor *leitor1, tLeitor *leitor2){
 }
 
 int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2){
-    tLeitor *aux, *ant;
+    tLista *analisadas;
+    tLeitor *novoLeitor;
 
-    if(ProcuraCelulaLeitor(leitor1->afinidades, leitor2) == TRUE) return TRUE;
+    analisadas = CriaLista();
 
-    aux = RetornaCelulaDiferente(leitor1->afinidades, leitor1);
-
-    while(aux != leitor1){
-        ant = aux;
-
-        if(ProcuraCelulaLeitor(aux->afinidades, leitor2) == TRUE) return TRUE;
-
-        aux = RetornaCelulaDiferente(aux->afinidades, aux);
-        if(aux == ant) break;
+    if(ProcuraCelulaLeitor(leitor1->afinidades, leitor1, leitor2, analisadas) == TRUE){
+        LiberaCelulas(analisadas);
+        return TRUE;
     }
+
+    else{
+        InsereLeitorLista(analisadas, leitor1);
+
+        while((novoLeitor = RetornaCelulaDiferente(leitor1->afinidades, analisadas)) != NULL){
+            if(ProcuraCelulaLeitor(novoLeitor->afinidades, novoLeitor, leitor2, analisadas) == TRUE){
+                LiberaCelulas(analisadas);
+                return TRUE;
+            }
+
+            InsereLeitorLista(analisadas, novoLeitor);
+        }
+    }
+
+    LiberaCelulas(analisadas);
 
     return FALSE;
 }
+
+/*tLista *RecursaoAfinidades(tLeitor *leitor){
+    return leitor->afinidades;
+}*/
 
 int GetIdLeitor(tLeitor *leitor){
     return leitor->id;

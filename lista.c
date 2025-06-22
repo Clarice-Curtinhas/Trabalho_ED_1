@@ -118,16 +118,19 @@ void InsereLivroLista(tLista *lista, tLivro *livro){
  * Inputs: ponteiro para a lista, leitor a ser procurado
  * Outputs: nenhum
  * Pre-condicao: a lista e o leitor existem (estão alocados)
- * Pos-condicao: se o litor foi encontrado, retorna o ponteiro para ele, se não, retorna NULL
+ * Pos-condicao: se o leitor foi encontrado, retorna o ponteiro para ele, se não, retorna NULL
 */
-int ProcuraCelulaLeitor(tLista *lista, tLeitor *leitor2){
+int ProcuraCelulaLeitor(tLista *lista, tLeitor *leitor1, tLeitor *leitor2, tLista *analisadas){
    tCelula *aux, *ajud;
+   tLeitor *novoLeitor;
+
    aux = lista->prim;
 
    while(aux != NULL){
       if (aux->info == leitor2){
          return 1;
       }
+
       aux = aux->prox;
    }
 
@@ -141,18 +144,30 @@ int ProcuraCelulaLeitor(tLista *lista, tLeitor *leitor2){
  * Pre-condicao: a lista e o leitor existem (estão alocados)
  * Pos-condicao: se um leitor diferente for encontrado, retorna o ponteiro para ele, se não, retorna o leitor antigo
 */
-tLeitor *RetornaCelulaDiferente(tLista *lista, tLeitor *leitor){
+tLeitor *RetornaCelulaDiferente(tLista *lista, tLista *analisadas){
    tCelula *aux, *ajud;
+   int jaExiste;
    aux = lista->prim;
 
    while(aux != NULL){
-      if (aux->info != leitor){
-         return (tLeitor*)aux->info;
+      jaExiste = 0;
+      ajud = analisadas->prim;
+
+      while(ajud != NULL){
+         if((tLeitor*)aux->info == (tLeitor*)ajud->info){
+            jaExiste = 1;
+            break;
+         }
+
+         ajud = ajud->prox;
       }
+
+      if(jaExiste == 0) return (tLeitor*)aux->info;
+
       aux = aux->prox;
    }
 
-   return leitor;
+   return NULL;
 }
 
 /*

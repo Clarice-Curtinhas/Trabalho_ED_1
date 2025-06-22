@@ -26,27 +26,13 @@ Livros em comum entre Diana e Eduardo: Nenhum livro em comum
 Livros em comum entre Gabriel e Helena: Nenhum livro em comum
 Livros em comum entre Ana e Diana: Nenhum livro em comum
 Erro: Leitor com ID 15 não encontrado
-
-Funcao 7: ##Estava dando errado, por isso comentei##
-
-
-Funcao 7: ##Estava dando errado, por isso comentei##
-
-
-Funcao 7: ##Estava dando errado, por isso comentei##
-
-
-Funcao 7: ##Estava dando errado, por isso comentei##
-
-
-Funcao 7: ##Estava dando errado, por isso comentei##
-
-
-Funcao 7: ##Estava dando errado, por isso comentei##
-
-
-Funcao 7: ##Estava dando errado, por isso comentei##
-
+Existe afinidade entre Ana e Bruno
+Existe afinidade entre Diana e Eduardo
+Existe afinidade entre Gabriel e Helena
+Não existe afinidade entre Ana e Diana
+Não existe afinidade entre Ana e Júlia
+Não existe afinidade entre Diana e Gabriel
+Não existe afinidade entre Bruno e Helena
 Erro: Leitor com ID 99 não encontrado
 Erro: Livro com ID 99 não encontrado
 Erro: Leitor com ID 99 não encontrado

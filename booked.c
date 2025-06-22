@@ -6,10 +6,10 @@
 #include "livro.h"
 #include "lista.h"
 
-#define LEITORES "test2/leitores.txt"
-#define LIVROS "test2/livros.txt"
-#define COMANDOS "test2/comandos.txt"
-#define SAIDA "saida2.txt"
+#define LEITORES "test3/leitores.txt"
+#define LIVROS "test3/livros.txt"
+#define COMANDOS "test3/comandos.txt"
+#define SAIDA "saida3.txt"
 
 #define TRUE 1
 #define FALSE 0
@@ -151,7 +151,6 @@ void LerLeitores(tLista *leitores, FILE *fp){
 
 
     for(int i = 1; i <= qntLeitores; i++){
-
         for(int j = i+1; j <= qntLeitores; j++){
             AssociaLeitores(InfoCelulaLeitor(BuscaListaLeitor(leitores, i)), InfoCelulaLeitor(BuscaListaLeitor(leitores, j)));
         }
@@ -288,7 +287,7 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
                 }
 
                 else{
-                    fprintf(saida, "%s não possui recomendação do ID %d feito por %s\n", GetNomeLeitor(leitorOrig), id2, GetNomeLeitor(leitorDest));
+                    fprintf(saida, "%s não possui recomendação do livro ID %d feito por %s\n", GetNomeLeitor(leitorOrig), id2, GetNomeLeitor(leitorDest));
                 }
             }
         }
@@ -312,7 +311,7 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
                 }
 
                 else{
-                    fprintf(saida, "%s não possui recomendação do ID %d feito por %s\n", GetNomeLeitor(leitorOrig), id2, GetNomeLeitor(leitorDest));
+                    fprintf(saida, "%s não possui recomendação do livro ID %d feito por %s\n", GetNomeLeitor(leitorOrig), id2, GetNomeLeitor(leitorDest));
                 }
             }
         }
@@ -346,11 +345,11 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
             //(n sei se vai usar elas separadas em outra parte do código)
 
             if(leitorOrig != NULL && leitorDest != NULL){
-                fprintf(saida, "\nFuncao 7: ##Estava dando errado, por isso comentei##\n\n");
-                /*temAfinidade = VerificaAfinidade(leitorOrig, leitorDest);
+                //fprintf(saida, "\nFuncao 7: ##Estava dando errado, por isso comentei##\n\n");
+                temAfinidade = VerificaAfinidade(leitorOrig, leitorDest);
 
                 if(temAfinidade == TRUE) fprintf(saida, "Existe afinidade entre %s e %s\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));
-                else fprintf(saida, "Não existe afinidade entre %s e %s\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));*/
+                else fprintf(saida, "Não existe afinidade entre %s e %s\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));
             }
         }
 

@@ -60,7 +60,7 @@ void InsereLivroLista(tLista *lista, tLivro *livro);
  * Pre-condicao: a lista e o leitor existem (estão alocados)
  * Pos-condicao: se o litor foi encontrado, retorna o ponteiro para ele, se não, retorna NULL
 */
-int ProcuraCelulaLeitor(tLista *lista, tLeitor *leitor2);
+int ProcuraCelulaLeitor(tLista *lista, tLeitor *leitor1, tLeitor *leitor2, tLista *procurados);
 
 /*
  * Busca um leitor diferente do que já está sendo usado na lista indicada.
@@ -69,7 +69,7 @@ int ProcuraCelulaLeitor(tLista *lista, tLeitor *leitor2);
  * Pre-condicao: a lista e o leitor existem (estão alocados)
  * Pos-condicao: se um leitor diferente for encontrado, retorna o ponteiro para ele, se não, retorna o leitor antigo
 */
-tLeitor *RetornaCelulaDiferente(tLista *lista, tLeitor *leitor);
+tLeitor *RetornaCelulaDiferente(tLista *lista, tLista *analisadas);
 
 /*
  * Compara as informações de duas listas de strings, para ver se existe uma info igual.

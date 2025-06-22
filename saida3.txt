@@ -45,102 +45,114 @@ Mariana recomenda "Admirável Mundo Novo" para Nicolas
 Nicolas recomenda "O Senhor dos Anéis" para Olivia
 Olivia recomenda "Auto da Barca do Inferno" para Amanda
 Bruno aceita recomendação "Dom Casmurro" de Amanda
-Gabriela rejeita recomendação "O Tempo e o Vento" de Amanda
+Gabriela não possui recomendação do livro ID 4 feito por Amanda
 Livros em comum entre Amanda e Bruno: Nenhum livro em comum
 Livros em comum entre Carla e Henrique: Nenhum livro em comum
 Livros em comum entre Elena e João: Nenhum livro em comum
 Livros em comum entre Gabriela e Karen: Nenhum livro em comum
 Livros em comum entre Isabela e Mariana: Nenhum livro em comum
 Livros em comum entre Leonardo e Olivia: Nenhum livro em comum
+Existe afinidade entre Amanda e Gabriela
+Existe afinidade entre Bruno e Isabela
+Existe afinidade entre Carla e Olivia
+Existe afinidade entre Elena e Nicolas
+Existe afinidade entre Felipe e Leonardo
+Existe afinidade entre Henrique e Mariana
+Existe afinidade entre João e Diego
+Existe afinidade entre Bruno e Elena
+Não existe afinidade entre João e Olivia
+Existe afinidade entre Felipe e Diego
+Existe afinidade entre Henrique e Nicolas
+Existe afinidade entre Diego e Karen
 Imprime toda a BookED
 
-Leitor: Olivia
-Lidos: Auto da Barca do Inferno
-Desejados: O Coruja
-Recomendacoes: O Senhor dos Anéis
-Afinidades: Leonardo, Karen, Henrique, Gabriela, Felipe, Carla, Amanda
-
-Leitor: Nicolas
-Lidos: O Senhor dos Anéis
-Desejados: Robinson Crusoé
-Recomendacoes: Admirável Mundo Novo
-Afinidades: Karen, João, Isabela, Felipe, Elena
-
-Leitor: Mariana
-Lidos: Admirável Mundo Novo
-Desejados: O Nome da Rosa
-Recomendacoes: O Guarani
-Afinidades: João, Isabela, Henrique, Gabriela, Elena, Diego, Carla, Bruno
-
-Leitor: Leonardo
-Lidos: O Guarani
-Desejados: O Tempo e o Vento
-Recomendacoes: Triste Fim de Policarpo Quaresma
-Afinidades: Olivia, Isabela, Gabriela, Felipe, Diego, Carla, Amanda
-
-Leitor: Karen
-Lidos: Triste Fim de Policarpo Quaresma
-Desejados: O Hobbit
-Recomendacoes: Robinson Crusoé
-Afinidades: Olivia, Nicolas, Henrique, Gabriela, Felipe, Elena, Carla, Bruno, Amanda
-
-Leitor: João
-Lidos: Robinson Crusoé
-Desejados: A Droga da Obediência
-Recomendacoes: E Não Sobrou Nenhum
-Afinidades: Nicolas, Mariana, Isabela, Elena, Diego
-
-Leitor: Isabela
-Lidos: E Não Sobrou Nenhum
-Desejados: As Aventuras de Tom Sawyer
-Recomendacoes: Vaga Música
-Afinidades: Nicolas, Mariana, Leonardo, João, Elena, Diego, Carla, Bruno
-
-Leitor: Henrique
-Lidos: Vaga Música
-Desejados: Capitães da Areia
-Recomendacoes: Capitães da Areia
-Afinidades: Olivia, Mariana, Karen, Gabriela, Carla, Amanda
-
-Leitor: Gabriela
-Lidos: O Tempo e o Vento
-Desejados: Vaga Música
-Recomendacoes: O Hobbit
-Afinidades: Olivia, Mariana, Leonardo, Karen, Henrique, Felipe, Carla, Bruno, Amanda
-
-Leitor: Felipe
-Lidos: O Hobbit
-Desejados: Casa-Grande & Senzala
-Recomendacoes: A Droga da Obediência
-Afinidades: Olivia, Nicolas, Leonardo, Karen, Gabriela, Elena, Amanda
-
-Leitor: Elena
-Lidos: A Droga da Obediência
-Desejados: O Senhor dos Anéis
-Recomendacoes: O Coruja
-Afinidades: Nicolas, Mariana, Karen, João, Isabela, Felipe, Diego
-
-Leitor: Diego
-Lidos: O Coruja
-Desejados: Admirável Mundo Novo
-Recomendacoes: 
-Afinidades: Mariana, Leonardo, João, Isabela, Elena, Carla
-
-Leitor: Carla
-Lidos: Capitães da Areia
-Desejados: Minha Vida de Menina
-Recomendacoes: O Nome da Rosa
-Afinidades: Olivia, Mariana, Leonardo, Karen, Isabela, Henrique, Gabriela, Diego, Amanda
+Leitor: Amanda
+Lidos: Dom Casmurro, O Alienista
+Desejados: A Cartomante
+Recomendacoes: O Tempo e o Vento, Auto da Barca do Inferno
+Afinidades: Bruno, Carla, Felipe, Gabriela, Henrique, Karen, Leonardo, Olivia
 
 Leitor: Bruno
 Lidos: O Nome da Rosa
 Desejados: Dom Casmurro, Dom Casmurro
 Recomendacoes: 
-Afinidades: Mariana, Karen, Isabela, Gabriela, Amanda
+Afinidades: Amanda, Gabriela, Isabela, Karen, Mariana
 
-Leitor: Amanda
-Lidos: O Alienista, Dom Casmurro
-Desejados: A Cartomante
-Recomendacoes: Auto da Barca do Inferno, O Tempo e o Vento
-Afinidades: Olivia, Leonardo, Karen, Henrique, Gabriela, Felipe, Carla, Bruno
+Leitor: Carla
+Lidos: Capitães da Areia
+Desejados: Minha Vida de Menina
+Recomendacoes: O Nome da Rosa
+Afinidades: Amanda, Diego, Gabriela, Henrique, Isabela, Karen, Leonardo, Mariana, Olivia
+
+Leitor: Diego
+Lidos: O Coruja
+Desejados: Admirável Mundo Novo
+Recomendacoes: 
+Afinidades: Carla, Elena, Isabela, João, Leonardo, Mariana
+
+Leitor: Elena
+Lidos: A Droga da Obediência
+Desejados: O Senhor dos Anéis
+Recomendacoes: O Coruja
+Afinidades: Diego, Felipe, Isabela, João, Karen, Mariana, Nicolas
+
+Leitor: Felipe
+Lidos: O Hobbit
+Desejados: Casa-Grande & Senzala
+Recomendacoes: A Droga da Obediência
+Afinidades: Amanda, Elena, Gabriela, Karen, Leonardo, Nicolas, Olivia
+
+Leitor: Gabriela
+Lidos: O Tempo e o Vento
+Desejados: Vaga Música
+Recomendacoes: O Hobbit
+Afinidades: Amanda, Bruno, Carla, Felipe, Henrique, Karen, Leonardo, Mariana, Olivia
+
+Leitor: Henrique
+Lidos: Vaga Música
+Desejados: Capitães da Areia
+Recomendacoes: Capitães da Areia
+Afinidades: Amanda, Carla, Gabriela, Karen, Mariana, Olivia
+
+Leitor: Isabela
+Lidos: E Não Sobrou Nenhum
+Desejados: As Aventuras de Tom Sawyer
+Recomendacoes: Vaga Música
+Afinidades: Bruno, Carla, Diego, Elena, João, Leonardo, Mariana, Nicolas
+
+Leitor: João
+Lidos: Robinson Crusoé
+Desejados: A Droga da Obediência
+Recomendacoes: E Não Sobrou Nenhum
+Afinidades: Diego, Elena, Isabela, Mariana, Nicolas
+
+Leitor: Karen
+Lidos: Triste Fim de Policarpo Quaresma
+Desejados: O Hobbit
+Recomendacoes: Robinson Crusoé
+Afinidades: Amanda, Bruno, Carla, Elena, Felipe, Gabriela, Henrique, Nicolas, Olivia
+
+Leitor: Leonardo
+Lidos: O Guarani
+Desejados: O Tempo e o Vento
+Recomendacoes: Triste Fim de Policarpo Quaresma
+Afinidades: Amanda, Carla, Diego, Felipe, Gabriela, Isabela, Olivia
+
+Leitor: Mariana
+Lidos: Admirável Mundo Novo
+Desejados: O Nome da Rosa
+Recomendacoes: O Guarani
+Afinidades: Bruno, Carla, Diego, Elena, Gabriela, Henrique, Isabela, João
+
+Leitor: Nicolas
+Lidos: O Senhor dos Anéis
+Desejados: Robinson Crusoé
+Recomendacoes: Admirável Mundo Novo
+Afinidades: Elena, Felipe, Isabela, João, Karen
+
+Leitor: Olivia
+Lidos: Auto da Barca do Inferno
+Desejados: O Coruja
+Recomendacoes: O Senhor dos Anéis
+Afinidades: Amanda, Carla, Felipe, Gabriela, Henrique, Karen, Leonardo
 
