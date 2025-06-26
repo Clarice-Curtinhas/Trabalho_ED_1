@@ -39,65 +39,31 @@ tLista *CriaLista(){
  * Pre-condicao: a lista e o elemento existem (estão alocados)
  * Pos-condicao: lista com o novo elemento inserido na primeira posição
 */
+void InsereElementoLista(tLista *lista, void *elemento){
+   tCelula *nova = (tCelula*) calloc(1, sizeof(tCelula));
+
+   if (elemento != NULL){
+      nova->info = elemento;
+      nova->prox = lista->prim;
+
+      if (lista->prim != NULL){
+         lista->prim->ant = nova;
+      }
+
+      else {
+         lista->ult = nova;
+      }
+
+      lista->prim = nova;
+      nova->ant = NULL;
+   }
+}
+
 void InsereStringLista(tLista *lista, char *genero){
    tCelula *nova = (tCelula*) calloc(1, sizeof(tCelula));
 
    if (genero != NULL){
       nova->info = strdup(genero);
-      nova->prox = lista->prim;
-
-      if (lista->prim != NULL){
-         lista->prim->ant = nova;
-      }
-
-      else {
-         lista->ult = nova;
-      }
-
-      lista->prim = nova;
-      nova->ant = NULL;
-   }
-}
-
-/*
- * Insere um novo elemento no início da lista.
- * Inputs: ponteiro para a lista onde será inserido o elemento, ponteiro para o elemento a ser inserido
- * Outputs: nenhum
- * Pre-condicao: a lista e o elemento existem (estão alocados)
- * Pos-condicao: lista com o novo elemento inserido na primeira posição
-*/
-void InsereLeitorLista(tLista *lista, tLeitor *leitor){
-   tCelula *nova = (tCelula*) calloc(1, sizeof(tCelula));
-
-   if (leitor != NULL){
-      nova->info = leitor;
-      nova->prox = lista->prim;
-
-      if (lista->prim != NULL){
-         lista->prim->ant = nova;
-      }
-
-      else {
-         lista->ult = nova;
-      }
-
-      lista->prim = nova;
-      nova->ant = NULL;
-   }
-}
-
-/*
- * Insere um novo elemento no início da lista.
- * Inputs: ponteiro para a lista onde será inserido o elemento, ponteiro para o elemento a ser inserido
- * Outputs: nenhum
- * Pre-condicao: a lista e o elemento existem (estão alocados)
- * Pos-condicao: lista com o novo elemento inserido na primeira posição
-*/
-void InsereLivroLista(tLista *lista, tLivro *livro){
-   tCelula *nova = (tCelula*) calloc(1, sizeof(tCelula));
-
-   if (livro != NULL){
-      nova->info = livro;
       nova->prox = lista->prim;
 
       if (lista->prim != NULL){

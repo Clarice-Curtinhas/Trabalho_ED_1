@@ -145,7 +145,7 @@ void LerLeitores(tLista *leitores, FILE *fp){
             AdicionarGenero(leitor, genero);
         }
 
-        InsereLeitorLista(leitores, leitor);
+        InsereElementoLista(leitores, leitor);
         qntLeitores++;
     }
 
@@ -175,7 +175,7 @@ void LerLivros(tLista *livros, FILE *fp){
 
         //printf("%d; %s; %s; %s; %d", id, titulo, autor, genero, ano);
         livro = CadastraLivro(id, titulo, autor, genero, ano);
-        InsereLivroLista(livros, livro);
+        InsereElementoLista(livros, livro);
     }
 }
 
@@ -305,7 +305,7 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
             //(n sei se vai usar elas separadas em outra parte do código)
 
             if(leitorOrig != NULL && leitorDest != NULL && livro != NULL){
-                if(LivroExisteNosDadosDoLeitor(leitorOrig, id2, 3) == 1){
+                if(LivroExisteNosDadosDoLeitor(leitorOrig, id2, 3) == TRUE){
                     AceitarRecomendacao(leitorOrig, livro, FALSE);
                     fprintf(saida, "%s rejeita recomendação \"%s\" de %s\n", GetNomeLeitor(leitorOrig), GetNomeLivro(livro), GetNomeLeitor(leitorDest));
                 }

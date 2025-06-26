@@ -33,25 +33,9 @@ tLista *CriaLista();
  * Pre-condicao: a lista e o elemento existem (estão alocados)
  * Pos-condicao: lista com o novo elemento inserido na primeira posição
 */
+void InsereElementoLista(tLista *lista, void *elemento);
+
 void InsereStringLista(tLista *lista, char *genero);
-
-/*
- * Insere um novo elemento no início da lista.
- * Inputs: ponteiro para a lista onde será inserido o elemento, ponteiro para o elemento a ser inserido
- * Outputs: nenhum
- * Pre-condicao: a lista e o elemento existem (estão alocados)
- * Pos-condicao: lista com o novo elemento inserido na primeira posição
-*/
-void InsereLeitorLista(tLista *lista, tLeitor *leitor);
-
-/*
- * Insere um novo elemento no início da lista.
- * Inputs: ponteiro para a lista onde será inserido o elemento, ponteiro para o elemento a ser inserido
- * Outputs: nenhum
- * Pre-condicao: a lista e o elemento existem (estão alocados)
- * Pos-condicao: lista com o novo elemento inserido na primeira posição
-*/
-void InsereLivroLista(tLista *lista, tLivro *livro);
 
 /*
  * Busca um leitor na lista indicada.

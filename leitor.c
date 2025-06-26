@@ -50,25 +50,25 @@ void AdicionarGenero(tLeitor *leitor, char *genero){
 void AssociaLeitores(tLeitor *leitor1, tLeitor *leitor2){
     if(leitor1 != NULL && leitor2 != NULL){
         if(ComparaListasStrings(leitor1->generos, leitor2->generos) == TRUE){
-            InsereLeitorLista(leitor1->afinidades, leitor2);
-            InsereLeitorLista(leitor2->afinidades, leitor1);
+            InsereElementoLista(leitor1->afinidades, leitor2);
+            InsereElementoLista(leitor2->afinidades, leitor1);
         }
     }
 }
 
 void AdicionarLivroLido(tLeitor *leitor, tLivro *livro){
-    InsereLivroLista(leitor->lidos, livro);
+    InsereElementoLista(leitor->lidos, livro);
 }
 
 void AdicionarLivroDesejado(tLeitor *leitor, tLivro *livro){
-    InsereLivroLista(leitor->desejados, livro);
+    InsereElementoLista(leitor->desejados, livro);
 }
 
 int RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor){
     if(BuscaListaLivro(leitor->lidos, GetIdLivro(livro)) != NULL) return 1;
 
     else{
-        InsereLivroLista(leitor->recomendacoes, livro);
+        InsereElementoLista(leitor->recomendacoes, livro);
         return 0;
     }
 }
@@ -88,7 +88,7 @@ int LivroExisteNosDadosDoLeitor(tLeitor *leitor, int id, int lista){
 
 void AceitarRecomendacao(tLeitor *leitor, tLivro *livro, int acao){
     if(acao == TRUE){
-        InsereLivroLista(leitor->desejados, livro);
+        InsereElementoLista(leitor->desejados, livro);
         RetiraListaLivro(leitor->recomendacoes, GetIdLivro(livro));
     }
 
@@ -118,7 +118,7 @@ int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2){
     }
 
     else{
-        InsereLeitorLista(analisadas, leitor1);
+        InsereElementoLista(analisadas, leitor1);
 
         while((novoLeitor = RetornaCelulaDiferente(leitor1->afinidades, analisadas)) != NULL){
             if(ProcuraCelulaLeitor(novoLeitor->afinidades, novoLeitor, leitor2, analisadas) == TRUE){
@@ -126,7 +126,7 @@ int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2){
                 return TRUE;
             }
 
-            InsereLeitorLista(analisadas, novoLeitor);
+            InsereElementoLista(analisadas, novoLeitor);
         }
     }
 
