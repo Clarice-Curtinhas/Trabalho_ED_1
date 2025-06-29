@@ -52,23 +52,29 @@ void AssociaLeitores(tLeitor *leitor1, tLeitor *leitor2){
         if(ComparaListasStrings(leitor1->generos, leitor2->generos) == TRUE){
             InsereElementoLista(leitor1->afinidades, leitor2);
             InsereElementoLista(leitor2->afinidades, leitor1);
+
+            DefineTipoLeitor(leitor1->afinidades);
+            DefineTipoLeitor(leitor2->afinidades);   
         }
     }
 }
 
 void AdicionarLivroLido(tLeitor *leitor, tLivro *livro){
     InsereElementoLista(leitor->lidos, livro);
+    DefineTipoLivro(leitor->lidos);
 }
 
 void AdicionarLivroDesejado(tLeitor *leitor, tLivro *livro){
     InsereElementoLista(leitor->desejados, livro);
+    DefineTipoLivro(leitor->lidos);
 }
 
 int RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor){
-    if(BuscaListaLivro(leitor->lidos, GetIdLivro(livro)) != NULL) return 1;
+    if(BuscaElementoLista(leitor->lidos, GetIdLivro(livro)) != NULL) return 1;
 
     else{
         InsereElementoLista(leitor->recomendacoes, livro);
+        DefineTipoLivro(leitor->recomendacoes);
         return 0;
     }
 }
@@ -76,9 +82,9 @@ int RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor){
 int LivroExisteNosDadosDoLeitor(tLeitor *leitor, int id, int lista){
     tLivro *livro;
 
-    if(lista == 1) livro = InfoCelulaLivro(BuscaListaLivro(leitor->lidos, id));
-    else if(lista == 2) livro = InfoCelulaLivro(BuscaListaLivro(leitor->desejados, id));
-    else if(lista == 3) livro = InfoCelulaLivro(BuscaListaLivro(leitor->recomendacoes, id));
+    if(lista == 1) livro = InfoCelulaLivro(BuscaElementoLista(leitor->lidos, id));
+    else if(lista == 2) livro = InfoCelulaLivro(BuscaElementoLista(leitor->desejados, id));
+    else if(lista == 3) livro = InfoCelulaLivro(BuscaElementoLista(leitor->recomendacoes, id));
 
     if(livro != NULL){
         return TRUE;
@@ -89,24 +95,27 @@ int LivroExisteNosDadosDoLeitor(tLeitor *leitor, int id, int lista){
 void AceitarRecomendacao(tLeitor *leitor, tLivro *livro, int acao){
     if(acao == TRUE){
         InsereElementoLista(leitor->desejados, livro);
-        RetiraListaLivro(leitor->recomendacoes, GetIdLivro(livro));
+        DefineTipoLivro(leitor->desejados);
+        RetiraElementoLista(leitor->recomendacoes, GetIdLivro(livro));
     }
 
     else{
-        RetiraListaLivro(leitor->recomendacoes, GetIdLivro(livro));
+        RetiraElementoLista(leitor->recomendacoes, GetIdLivro(livro));
         // ATENÇÃO: FAZER O RETIRA COM O GET ID É MAIS CUSTOSO PENSAR EM FAZER UMA FUNÇÃO QUE RETIRE DE FORMA DIRETA
     }
 }
 
-tLivro *ProcuraLivroEmComum(tLeitor *leitor1, tLeitor *leitor2){
-    tLivro *livro;
+int ProcuraLivrosEmComum(tLeitor *leitor1, tLeitor *leitor2, tLista *livrosEmComum){
 
-    livro = ProcuraCelulaEmComum(leitor1->lidos, leitor2->lidos);
+    ProcuraCelulasEmComum(leitor1->lidos, leitor2->lidos, livrosEmComum);
 
-    return livro;
 }
 
-int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2){
+void ImprimeLivrosEmComum(tLeitor *leitor1, tLeitor *leitor2, FILE *saida){
+    ImprimeCelulasEmComum(leitor1->lidos, leitor2->lidos, saida);
+}
+
+/*int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2){
     tLista *analisadas;
     tLeitor *novoLeitor;
 
@@ -133,8 +142,33 @@ int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2){
     LiberaCelulas(analisadas);
 
     return FALSE;
-}
+}*/
 
+int ExisteAfinidade(tLeitor *leitor1, tLeitor *leitor2){
+    if (ProcuraCelulaLeitor(leitor1->afinidades, leitor2) == TRUE){
+        return TRUE;
+    }
+
+    else {
+        tCelula *aux;
+        tLeitor *leitorAux;
+        aux = GetPrimeiraCelula(leitor1->afinidades);
+        leitorAux = InfoCelulaLeitor(aux);
+
+        while(aux != NULL){
+            if (ProcuraCelulaLeitor(leitorAux->afinidades, leitor2) == TRUE){
+                return TRUE;
+            }
+
+            else {
+                aux = GetProximaCelula(aux);
+                leitorAux = InfoCelulaLeitor(aux);
+            }
+        }
+
+        return FALSE;
+    }
+}
 /*tLista *RecursaoAfinidades(tLeitor *leitor){
     return leitor->afinidades;
 }*/

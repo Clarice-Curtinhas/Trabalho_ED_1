@@ -20,9 +20,7 @@ struct Lista {
  * Cria uma nova lista, alocando memória para ela.
  * Inputs: nenhum
  * Outputs: um tipo "tLista" alocado. Primeira e última posições vazias
- * Pre-condicao: nenhuma
- * Pos-condicao: um tipo "tLista" alocado. Primeira e última posições vazias
-*/
+ */
 tLista *CriaLista(){
    tLista *lista = (tLista*) calloc(1, sizeof(tLista));
 
@@ -36,9 +34,7 @@ tLista *CriaLista(){
  * Insere um novo elemento no início da lista.
  * Inputs: ponteiro para a lista onde será inserido o elemento, ponteiro para o elemento a ser inserido
  * Outputs: nenhum
- * Pre-condicao: a lista e o elemento existem (estão alocados)
- * Pos-condicao: lista com o novo elemento inserido na primeira posição
-*/
+ */
 void InsereElementoLista(tLista *lista, void *elemento){
    tCelula *nova = (tCelula*) calloc(1, sizeof(tCelula));
 
@@ -79,21 +75,26 @@ void InsereStringLista(tLista *lista, char *genero){
    }
 }
 
+void DefineTipoLeitor(tLista *lista){
+   lista->prim->tipo = LEITOR;
+}
+
+void DefineTipoLivro(tLista *lista){
+   lista->prim->tipo = LIVRO;
+}
+
 /*
  * Busca um leitor na lista indicada.
  * Inputs: ponteiro para a lista, leitor a ser procurado
  * Outputs: nenhum
- * Pre-condicao: a lista e o leitor existem (estão alocados)
- * Pos-condicao: se o leitor foi encontrado, retorna o ponteiro para ele, se não, retorna NULL
-*/
-int ProcuraCelulaLeitor(tLista *lista, tLeitor *leitor1, tLeitor *leitor2, tLista *analisadas){
-   tCelula *aux, *ajud;
-   tLeitor *novoLeitor;
+ */
+int ProcuraCelulaLeitor(tLista *lista, tLeitor *leitor){
+   tCelula *aux;
 
    aux = lista->prim;
 
    while(aux != NULL){
-      if (aux->info == leitor2){
+      if (aux->info == leitor){
          return 1;
       }
 
@@ -103,13 +104,19 @@ int ProcuraCelulaLeitor(tLista *lista, tLeitor *leitor1, tLeitor *leitor2, tList
    return 0;
 }
 
+tCelula *GetPrimeiraCelula(tLista *lista){
+   return lista->prim;
+}
+
+tCelula *GetProximaCelula(tCelula *celula){
+   return celula->prox;
+}
+
 /*
  * Busca um leitor diferente do que já está sendo usado na lista indicada.
  * Inputs: ponteiro para a lista, leitor usado
  * Outputs: nenhum
- * Pre-condicao: a lista e o leitor existem (estão alocados)
- * Pos-condicao: se um leitor diferente for encontrado, retorna o ponteiro para ele, se não, retorna o leitor antigo
-*/
+ */
 tLeitor *RetornaCelulaDiferente(tLista *lista, tLista *analisadas){
    tCelula *aux, *ajud;
    int jaExiste;
@@ -140,9 +147,7 @@ tLeitor *RetornaCelulaDiferente(tLista *lista, tLista *analisadas){
  * Compara as informações de duas listas de strings, para ver se existe uma info igual.
  * Inputs: ponteiro para a primrira lista e para a segunda lista que vão ser comparadas.
  * Outputs: 1 caso eles tenham informações que se repetem e 0, caso contrário.
- * Pre-condicao: as listas existem (estão alocados)
- * Pos-condicao: se a informação foi encontrado ou não, retorna os valores 1 ou 0, respectivamente
-*/
+ */
 int ComparaListasStrings(tLista *lista1, tLista *lista2){
    tCelula *aux, *ajud;
 
@@ -156,19 +161,24 @@ int ComparaListasStrings(tLista *lista1, tLista *lista2){
 }
 
 /*
- * Busca um leitor na lista indicada.
- * Inputs: ponteiro para a lista, ID do leitor a ser procurado
+ * Busca um elemento na lista indicada.
+ * Inputs: ponteiro para a lista, ID do elemento a ser procurado
  * Outputs: nenhum
- * Pre-condicao: a lista e o leitor existem (estão alocados)
- * Pos-condicao: se o litor foi encontrado, retorna o ponteiro para ele, se não, retorna NULL
-*/
-tCelula *BuscaListaLeitor(tLista *lista, int id){
+ */
+tCelula *BuscaElementoLista(tLista *lista, int id){
    tCelula *aux;
    int idAux;
    aux = lista->prim;
 
    while(aux != NULL){
-      idAux = GetIdLeitor(aux->info);
+
+      if (aux->tipo == LEITOR){
+         idAux = GetIdLeitor(aux->info);
+      }
+
+      else if (aux->tipo == LIVRO){
+         idAux = GetIdLivro(aux->info);
+      }
 
       if (idAux == id){
          return aux;
@@ -184,46 +194,17 @@ tCelula *BuscaListaLeitor(tLista *lista, int id){
  * Retorna a informação de uma celula
  * Inputs: ponteiro para uma celula
  * Outputs: a informação
- * Pre-condicao: a celula existe (está alocada)
- * Pos-condicao: a informação dentro da celula
-*/
+ */
 tLeitor *InfoCelulaLeitor(tCelula *cel){
-   if(cel != NULL) return cel->info;
+   if(cel != NULL) return ((tLeitor*)cel->info);
    else return NULL;
 }
 
 /*
- * Busca um livro na lista indicada.
- * Inputs: ponteiro para a lista, ID do livro a ser procurado
- * Outputs: nenhum
- * Pre-condicao: a lista e o livro existem (estão alocados)
- * Pos-condicao: se o livro foi encontrado, retorna o ponteiro para ele, se não, retorna NULL
-*/
-tCelula *BuscaListaLivro(tLista *lista, int id){
-   tCelula *aux;
-   int idAux;
-   aux = lista->prim;
-
-   while(aux != NULL){
-      idAux = GetIdLivro(aux->info);
-
-      if (idAux == id){
-         return aux;
-      }
-
-      aux = aux->prox;
-   }
-
-   return NULL;
-}
-
-/*
  * Retorna a informação de uma celula
  * Inputs: ponteiro para uma celula
  * Outputs: a informação
- * Pre-condicao: a celula existe (está alocada)
- * Pos-condicao: a informação dentro da celula
-*/
+ */
 tLivro *InfoCelulaLivro(tCelula *cel){
    if(cel != NULL) return cel->info;
    else return NULL;
@@ -233,32 +214,53 @@ tLivro *InfoCelulaLivro(tCelula *cel){
  * Compara as informações de duas listas, para ver se existe uma info igual.
  * Inputs: ponteiro para a primrira lista e para a segunda lista que vão ser comparadas.
  * Outputs: a informação, caso eles tenham informações que se repetem e NULL, caso contrário.
- * Pre-condicao: as listas existem (estão alocados)
- * Pos-condicao: se a informação foi encontrado ou não, retorna a própria info ou NULL, respectivamente
-*/
-tLivro *ProcuraCelulaEmComum(tLista *lista1, tLista *lista2){
+ */
+int ProcuraCelulasEmComum(tLista *lista1, tLista *lista2, tLista *livrosEmComum){
    tCelula *aux, *ajud;
+   int qtd = 0;
 
    for(aux = lista1->prim; aux != NULL; aux = aux->prox){
       for(ajud = lista2->prim; ajud != NULL; ajud = ajud->prox){
-         if((tLivro*)aux->info == (tLivro*)ajud->info) return (tLivro*)aux->info;
+         if((tLivro*)aux->info == (tLivro*)ajud->info) {
+            InsereElementoLista(livrosEmComum, (tLivro*)aux->info);
+            qtd++;
+         }
+      }
+   
+
+   return qtd;
+}
+}
+
+void ImprimeCelulasEmComum(tLista *lista1, tLista *lista2, FILE *saida){
+   tLista *livrosEmComum = CriaLista();
+   tCelula *aux, *ajud;
+   int qtd = 0;
+
+   for(aux = lista1->prim; aux != NULL; aux = aux->prox){
+      for(ajud = lista2->prim; ajud != NULL; ajud = ajud->prox){
+         if(GetIdLivro(aux->info) == GetIdLivro(ajud->info)) {
+            InsereElementoLista(livrosEmComum, aux->info);
+            qtd++;
+         }
       }
    }
 
-   return NULL;
+   if (qtd == 0) fprintf(saida, "Nenhum livro em comum");
+   else ImprimeListaLivro(livrosEmComum, saida);
+   fprintf(saida, "\n");
+   LiberaCelulas(livrosEmComum);
 }
 
 /*
- * Retira um leitor da lista indicada.
- * Inputs: ponteiro para a lista, ID do leitor a ser procurado
+ * Retira um elemento da lista indicada.
+ * Inputs: ponteiro para a lista, ID do elemento a ser procurado
  * Outputs: nenhum
- * Pre-condicao: a lista e o leitor existem (estão alocados)
- * Pos-condicao: se o leitor foi encontrado, retira o leitor da lista, se não, a lista permanece inalterada
-*/
-void RetiraListaLeitor(tLista *lista, int id){
+ */
+void RetiraElementoLista(tLista *lista, int id){
    tCelula *aux;
 
-   aux = BuscaListaLeitor(lista, id);
+   aux = BuscaElementoLista(lista, id);
 
    if (aux != NULL){
       if (aux->ant == NULL){ // Verifica se e o primeiro da lista
@@ -296,58 +298,10 @@ void RetiraListaLeitor(tLista *lista, int id){
 }
 
 /*
- * Retira um livro da lista indicada.
- * Inputs: ponteiro para a lista, ID do livro a ser procurado
- * Outputs: nenhum
- * Pre-condicao: a lista e o livro existem (estão alocados)
- * Pos-condicao: se o livro foi encontrado, retira o livro da lista, se não, a lista permanece inalterada
-*/
-void RetiraListaLivro(tLista *lista, int id){
-   tCelula *aux;
-
-   aux = BuscaListaLivro(lista, id);
-
-   if (aux != NULL){
-      if (aux->ant == NULL){ // Verifica se e o primeiro da lista
-         lista->prim = aux->prox;
-
-         if (lista->prim != NULL){
-            lista->prim->ant = NULL;
-         }
-
-         else {
-            lista->ult = NULL; // Lista ficou vazia
-         }
-      }
-
-      else if (aux->prox == NULL){ // Verifica se é o último da lista
-         lista->ult = aux->ant;
-
-         if (lista->ult != NULL){
-            lista->ult->prox = NULL;
-         }
-
-         else {
-            lista->prim = NULL; // Lista ficou vazia
-         }
-      }
-
-      else { // Retira elemento do meio da lista
-         aux->ant->prox = aux->prox;
-         aux->prox->ant = aux->ant;
-      }
-
-      free(aux);
-   }
-}
-
-/*
  * Imprime uma lista de leitores.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
- * Pre-condicao: a lista existe (está alocada)
- * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
-*/
+ */
 void ImprimeListaLeitor(tLista *lista, FILE *saida){
    tCelula *aux;
    aux = lista->ult;
@@ -363,9 +317,7 @@ void ImprimeListaLeitor(tLista *lista, FILE *saida){
  * Imprime os nomes dos leitores.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
- * Pre-condicao: a lista existe (está alocada)
- * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
-*/
+ */
 void ImprimeListaNomesLeitores(tLista *lista, FILE *saida){
    tCelula *aux;
    int start = 0;
@@ -393,13 +345,13 @@ void ImprimeListaLivro(tLista *lista, FILE *saida){
    tCelula *aux;
    int start = 0;
 
-   aux = lista->ult;
+   aux = lista->prim;
 
    while(aux != NULL){
       if(start == 1) fprintf(saida, ", ");
 
       fprintf(saida, "%s", GetNomeLivro(aux->info));
-      aux = aux->ant;
+      aux = aux->prox;
       start = 1;
    }
 }
@@ -408,9 +360,7 @@ void ImprimeListaLivro(tLista *lista, FILE *saida){
  * Imprime uma lista de strings.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
- * Pre-condicao: a lista existe (está alocada)
- * Pos-condicao: nenhuma alteração feita nos conteúdos das estruturas de dados
-*/
+ */
 void ImprimeListaStrings(tLista *lista){
    tCelula *aux;
    aux = lista->prim;
@@ -425,9 +375,7 @@ void ImprimeListaStrings(tLista *lista){
  * Libera a memória de uma lista de Strings.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
- * Pre-condicao: a lista existe (está alocada)
- * Pos-condicao: memórias da lista e dos seus elementos liberadas
-*/
+ */
 void LiberaListaString(tLista *lista){
    tCelula *aux;
    aux = lista->prim;
@@ -456,9 +404,7 @@ void LiberaListaString(tLista *lista){
  * Libera a memória de uma lista de celulas.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
- * Pre-condicao: a lista existe (está alocada)
- * Pos-condicao: memórias da lista e dos seus elementos liberadas
-*/
+ */
 void LiberaCelulas(tLista *lista){
    tCelula *aux;
    aux = lista->prim;
@@ -481,52 +427,25 @@ void LiberaCelulas(tLista *lista){
 }
 
 /*
- * Libera a memória de uma lista de leitores.
+ * Libera a memória de uma lista.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
- * Pre-condicao: a lista existe (está alocada)
- * Pos-condicao: memórias da lista e dos seus elementos liberadas
-*/
-void LiberaListaLeitor(tLista *lista){
+ */
+void LiberaLista(tLista *lista){
    tCelula *aux;
    aux = lista->prim;
 
    if (lista != NULL && aux != NULL){
 
       while(1){
-         DesalocaLeitor(aux->info);
-      
-         if (aux->prox != NULL){
-            aux = aux->prox;
-            free(aux->ant);
+         if (aux->tipo == LEITOR){
+            DesalocaLeitor(aux->info);
          }
 
-         else {
-            free(aux);
-            break;
+         else if (aux->tipo == LIVRO){
+            LiberaLivro(aux->info);
          }
-      }
-   }
-
-   free(lista);
-}
-
-/*
- * Libera a memória de uma lista de livros.
- * Inputs: ponteiro para a lista
- * Outputs: nenhum
- * Pre-condicao: a lista existe (está alocada)
- * Pos-condicao: memórias da lista e dos seus elementos liberadas
-*/
-void LiberaListaLivro(tLista *lista){
-   tCelula *aux;
-   aux = lista->prim;
-
-   if (lista != NULL && aux != NULL){
-
-      while(1){
-         LiberaLivro(aux->info);
-      
+         
          if (aux->prox != NULL){
             aux = aux->prox;
             free(aux->ant);

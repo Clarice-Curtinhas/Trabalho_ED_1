@@ -6,10 +6,10 @@
 #include "livro.h"
 #include "lista.h"
 
-#define LEITORES "test3/leitores.txt"
-#define LIVROS "test3/livros.txt"
-#define COMANDOS "test3/comandos.txt"
-#define SAIDA "saida3.txt"
+#define LEITORES "test1/leitores.txt"
+#define LIVROS "test1/livros.txt"
+#define COMANDOS "test1/comandos.txt"
+#define SAIDA "saida1.txt"
 
 #define TRUE 1
 #define FALSE 0
@@ -18,36 +18,28 @@
  * Inicializa a lista de leitores, fazendo as associações de afinidades.
  * Inputs: um tipo "tLista" onde serão alocados os leitores e um FILE *fp para a leitura dos dados
  * Outputs: nenhuma
- * Pre-condicao: um tipo "tLista" vazio e um FILE *fp com os dados de leitores
- * Pos-condicao: nenhum
-*/
+ */
 void LerLeitores(tLista *leitores, FILE *fp);
 
 /*
  * Inicializa a lista de livros.
  * Inputs: um tipo "tLista" onde serão alocados os livros e um FILE *fp para a leitura dos dados
  * Outputs: nenhuma
- * Pre-condicao: um tipo "tLista" vazio e um FILE *fp com os dados de livros
- * Pos-condicao: nenhum
-*/
+ */
 void LerLivros(tLista *livros, FILE *fp);
 
 /*
  * Execução dos comandos existentes em 'comandos.txt'
  * Inputs: dois tipos "tLista" onde estarão as informações sobre os leitores e os livros e um FILE *fp para a leitura dos dados
  * Outputs: nenhuma
- * Pre-condicao: um FILE *fp com os comandos ordenados
- * Pos-condicao: nenhum
-*/
+ */
 void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida);
 
 /*
  * Inicializa e executa o programa com os arquivos de inicialização
  * Inputs: argc e argv para ter acesso aos documentos de inicialização
  * Outputs: um tipo "tLista" alocado. Primeira e última posições vazias
- * Pre-condicao: nenhuma
- * Pos-condicao: nenhuma
-*/
+ */
 int main(int argc, const char **argv){
     tLista *leitores, *livros;
 
@@ -115,8 +107,8 @@ int main(int argc, const char **argv){
     fclose(saida);
     fclose(fp);
 
-    LiberaListaLivro(livros);
-    LiberaListaLeitor(leitores);
+    LiberaLista(livros);
+    LiberaLista(leitores);
 
     return 0;
 }
@@ -125,9 +117,7 @@ int main(int argc, const char **argv){
  * Inicializa a lista de leitores, fazendo as associações de afinidades.
  * Inputs: um tipo "tLista" onde serão alocados os leitores e um FILE *fp para a leitura dos dados
  * Outputs: nenhuma
- * Pre-condicao: um tipo "tLista" vazio e um FILE *fp com os dados de leitores
- * Pos-condicao: nenhum
-*/
+ */
 void LerLeitores(tLista *leitores, FILE *fp){
     tLeitor *leitor;
     int id, n, qntLeitores = 0;
@@ -146,13 +136,14 @@ void LerLeitores(tLista *leitores, FILE *fp){
         }
 
         InsereElementoLista(leitores, leitor);
+        DefineTipoLeitor(leitores); // Define o tipo da nova célula inserida como "LEITOR"
         qntLeitores++;
     }
 
 
     for(int i = 1; i <= qntLeitores; i++){
         for(int j = i+1; j <= qntLeitores; j++){
-            AssociaLeitores(InfoCelulaLeitor(BuscaListaLeitor(leitores, i)), InfoCelulaLeitor(BuscaListaLeitor(leitores, j)));
+            AssociaLeitores(InfoCelulaLeitor(BuscaElementoLista(leitores, i)), InfoCelulaLeitor(BuscaElementoLista(leitores, j)));
         }
     }
 }
@@ -176,12 +167,13 @@ void LerLivros(tLista *livros, FILE *fp){
         //printf("%d; %s; %s; %s; %d", id, titulo, autor, genero, ano);
         livro = CadastraLivro(id, titulo, autor, genero, ano);
         InsereElementoLista(livros, livro);
+        DefineTipoLivro(livros); // Define o tipo da nova célula inserida como "LIVRO"
     }
 }
 
 tLeitor *EncontraLeitor(tLista *leitores, int id, FILE *saida){
-    if(BuscaListaLeitor(leitores, id) != NULL){
-        return InfoCelulaLeitor(BuscaListaLeitor(leitores, id));
+    if(BuscaElementoLista(leitores, id) != NULL){
+        return InfoCelulaLeitor(BuscaElementoLista(leitores, id));
     }
 
     else{
@@ -191,8 +183,8 @@ tLeitor *EncontraLeitor(tLista *leitores, int id, FILE *saida){
 }
 
 tLivro *EncontraLivro(tLista *livros, int id, FILE *saida){
-    if(BuscaListaLivro(livros, id) != NULL){
-        return InfoCelulaLivro(BuscaListaLivro(livros, id));
+    if(BuscaElementoLista(livros, id) != NULL){
+        return InfoCelulaLivro(BuscaElementoLista(livros, id));
     }
 
     else{
@@ -262,7 +254,9 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
             if(leitorOrig != NULL && leitorDest != NULL && livro != NULL){
                 jaLeu = RecebeRecomendacaoLivro(livro, leitorDest);
 
-                if(jaLeu == 0) fprintf(saida, "%s recomenda \"%s\" para %s\n", GetNomeLeitor(leitorOrig), GetNomeLivro(livro), GetNomeLeitor(leitorDest));
+                if (id1 == id3) fprintf(saida, "%s não pode recomendar livros para si mesmo\n", GetNomeLeitor(leitorOrig));
+
+                else if(jaLeu == 0) fprintf(saida, "%s recomenda \"%s\" para %s\n", GetNomeLeitor(leitorOrig), GetNomeLivro(livro), GetNomeLeitor(leitorDest));
 
                 else fprintf(saida, "%s não precisa da recomendação de \"%s\" pois já leu este livro\n", GetNomeLeitor(leitorDest), GetNomeLivro(livro));
             }
@@ -287,7 +281,7 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
                 }
 
                 else{
-                    fprintf(saida, "%s não possui recomendação do livro ID %d feito por %s\n", GetNomeLeitor(leitorOrig), id2, GetNomeLeitor(leitorDest));
+                    fprintf(saida, "%s não possui recomendação do livro ID %d feita por %s\n", GetNomeLeitor(leitorOrig), id2, GetNomeLeitor(leitorDest));
                 }
             }
         }
@@ -311,14 +305,15 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
                 }
 
                 else{
-                    fprintf(saida, "%s não possui recomendação do livro ID %d feito por %s\n", GetNomeLeitor(leitorOrig), id2, GetNomeLeitor(leitorDest));
+                    fprintf(saida, "%s não possui recomendação do livro ID %d feita por %s\n", GetNomeLeitor(leitorOrig), id2, GetNomeLeitor(leitorDest));
                 }
             }
         }
 
         else if(func == 6){
-            tLivro *livro;
+            tLista *livrosEmComum = CriaLista();
             tLeitor *leitorOrig, *leitorDest;
+            int qtdEmComum;
 
             leitorOrig = EncontraLeitor(leitores, id1, saida);
             leitorDest = EncontraLeitor(leitores, id3, saida);
@@ -327,10 +322,19 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
             //(n sei se vai usar elas separadas em outra parte do código)
 
             if(leitorOrig != NULL && leitorDest != NULL){
-                livro = ProcuraLivroEmComum(leitorOrig, leitorDest);
+                fprintf(saida, "Livros em comum entre %s e %s: ", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));
 
-                if(livro != NULL) fprintf(saida, "Livros em comum entre %s e %s: %s\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest), GetNomeLivro(livro));
-                else fprintf(saida, "Livros em comum entre %s e %s: Nenhum livro em comum\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));
+
+                ImprimeLivrosEmComum(leitorOrig, leitorDest, saida);
+                /*qtdEmComum = ProcuraLivrosEmComum(leitorOrig, leitorDest, livrosEmComum);
+
+                if(qtdEmComum != 0) {
+                    fprintf(saida, "Livros em comum entre %s e %s: ", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));
+
+                    ImprimeListaLivro(livrosEmComum, saida);
+                }
+
+                else fprintf(saida, "Livros em comum entre %s e %s: Nenhum livro em comum\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));*/
             }
         }
 
@@ -346,7 +350,7 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
 
             if(leitorOrig != NULL && leitorDest != NULL){
                 //fprintf(saida, "\nFuncao 7: ##Estava dando errado, por isso comentei##\n\n");
-                temAfinidade = VerificaAfinidade(leitorOrig, leitorDest);
+                temAfinidade = ExisteAfinidade(leitorOrig, leitorDest);
 
                 if(temAfinidade == TRUE) fprintf(saida, "Existe afinidade entre %s e %s\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));
                 else fprintf(saida, "Não existe afinidade entre %s e %s\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));

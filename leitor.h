@@ -37,9 +37,13 @@ int LivroExisteNosDadosDoLeitor(tLeitor *leitor, int id, int lista);
 
 void AceitarRecomendacao(tLeitor *leitorOrig, tLivro *livro, int acao);
 
-tLivro *ProcuraLivroEmComum(tLeitor *leitor1, tLeitor *leitor2);
+//int ProcuraLivrosEmComum(tLeitor *leitor1, tLeitor *leitor2, tLista *livrosEmComum);
 
-int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2);
+void ImprimeLivrosEmComum(tLeitor *leitor1, tLeitor *leitor2, FILE *saida);
+
+//int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2);
+
+int ExisteAfinidade(tLeitor *leitor1, tLeitor *leitor2);
 
 //tLista *GetAfinidades(tLeitor *leitor);
 
