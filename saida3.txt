@@ -29,9 +29,9 @@ Leonardo deseja ler "O Tempo e o Vento"
 Mariana deseja ler "O Nome da Rosa"
 Nicolas deseja ler "Robinson Crusoé"
 Olivia deseja ler "O Coruja"
-Amanda recomenda "Dom Casmurro" para Bruno
+Bruno já deseja ler "Dom Casmurro", recomendação desnecessária
 Bruno recomenda "O Nome da Rosa" para Carla
-Carla recomenda "Capitães da Areia" para Henrique
+Henrique já deseja ler "Capitães da Areia", recomendação desnecessária
 Diego recomenda "O Coruja" para Elena
 Elena recomenda "A Droga da Obediência" para Felipe
 Felipe recomenda "O Hobbit" para Gabriela
@@ -44,8 +44,8 @@ Leonardo recomenda "O Guarani" para Mariana
 Mariana recomenda "Admirável Mundo Novo" para Nicolas
 Nicolas recomenda "O Senhor dos Anéis" para Olivia
 Olivia recomenda "Auto da Barca do Inferno" para Amanda
-Bruno aceita recomendação "Dom Casmurro" de Amanda
-Gabriela não possui recomendação do livro ID 4 feito por Amanda
+Bruno não possui recomendação do livro ID 1 feita por Amanda
+Gabriela não possui recomendação do livro ID 4 feita por Amanda
 Livros em comum entre Amanda e Bruno: Nenhum livro em comum
 Livros em comum entre Carla e Henrique: Nenhum livro em comum
 Livros em comum entre Elena e João: Nenhum livro em comum
@@ -60,7 +60,7 @@ Existe afinidade entre Felipe e Leonardo
 Existe afinidade entre Henrique e Mariana
 Existe afinidade entre João e Diego
 Existe afinidade entre Bruno e Elena
-Não existe afinidade entre João e Olivia
+Existe afinidade entre João e Olivia
 Existe afinidade entre Felipe e Diego
 Existe afinidade entre Henrique e Nicolas
 Existe afinidade entre Diego e Karen
@@ -74,7 +74,7 @@ Afinidades: Bruno, Carla, Felipe, Gabriela, Henrique, Karen, Leonardo, Olivia
 
 Leitor: Bruno
 Lidos: O Nome da Rosa
-Desejados: Dom Casmurro, Dom Casmurro
+Desejados: Dom Casmurro
 Recomendacoes: 
 Afinidades: Amanda, Gabriela, Isabela, Karen, Mariana
 
@@ -111,7 +111,7 @@ Afinidades: Amanda, Bruno, Carla, Felipe, Henrique, Karen, Leonardo, Mariana, Ol
 Leitor: Henrique
 Lidos: Vaga Música
 Desejados: Capitães da Areia
-Recomendacoes: Capitães da Areia
+Recomendacoes: 
 Afinidades: Amanda, Carla, Gabriela, Karen, Mariana, Olivia
 
 Leitor: Isabela

@@ -50,11 +50,11 @@ char *GetNomeLivro(tLivro *livro){
 
 /*
  * Imprime o título de um único livro.
- * Inputs: ponteiro para um elemento do tipo "tLivro"
+ * Inputs: ponteiro para um elemento do tipo "tLivro", arquivo de saida
  * Outputs: nenhum
  */
-void ImprimeLivro(tLivro *livro){
-    printf("%s", livro->titulo);
+void ImprimeLivro(tLivro *livro, FILE *saida){
+    fprintf(saida, "%s", livro->titulo);
 }
 
 /*

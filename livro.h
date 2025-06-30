@@ -35,10 +35,10 @@ char *GetNomeLivro(tLivro *livro);
 
 /*
  * Imprime o título de um único livro.
- * Inputs: ponteiro para um elemento do tipo "tLivro"
+ * Inputs: ponteiro para um elemento do tipo "tLivro", arquivo de saida
  * Outputs: nenhum
  */
-void ImprimeLivro(tLivro *livro);
+void ImprimeLivro(tLivro *livro, FILE *saida);
 
 /*
  * Libera a memória de um único livro.

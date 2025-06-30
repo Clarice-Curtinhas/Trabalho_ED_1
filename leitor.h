@@ -18,9 +18,7 @@ typedef struct Leitor tLeitor;
  * Cria um leitor novo no sistema "BookED!" a partir das informações passadas.
  * Inputs: uma string com o nome da pessoa, um int com o id da pessoa
  * Outputs: um tipo "tLeitor" alocado e com as listas criadas
- * Pre-condicao: nenhuma
- * Pos-condicao: um tipo "tLeitor" alocado e com as listas criadas
-*/
+ */
 tLeitor *CriaLeitor(char *nome, int id);
 
 void AdicionarGenero(tLeitor *leitor, char *genero);
@@ -36,8 +34,6 @@ int RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor);
 int LivroExisteNosDadosDoLeitor(tLeitor *leitor, int id, int lista);
 
 void AceitarRecomendacao(tLeitor *leitorOrig, tLivro *livro, int acao);
-
-//int ProcuraLivrosEmComum(tLeitor *leitor1, tLeitor *leitor2, tLista *livrosEmComum);
 
 void ImprimeLivrosEmComum(tLeitor *leitor1, tLeitor *leitor2, FILE *saida);
 

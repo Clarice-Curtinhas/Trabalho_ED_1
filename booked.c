@@ -6,10 +6,10 @@
 #include "livro.h"
 #include "lista.h"
 
-#define LEITORES "test1/leitores.txt"
-#define LIVROS "test1/livros.txt"
-#define COMANDOS "test1/comandos.txt"
-#define SAIDA "saida1.txt"
+#define LEITORES "test0/leitores.txt"
+#define LIVROS "test0/livros.txt"
+#define COMANDOS "test0/comandos.txt"
+#define SAIDA "saida0.txt"
 
 #define TRUE 1
 #define FALSE 0
@@ -135,15 +135,14 @@ void LerLeitores(tLista *leitores, FILE *fp){
             AdicionarGenero(leitor, genero);
         }
 
-        InsereElementoLista(leitores, leitor);
-        DefineTipoLeitor(leitores); // Define o tipo da nova célula inserida como "LEITOR"
+        InsereElementoLista(leitores, leitor, LEITOR);
         qntLeitores++;
     }
 
 
     for(int i = 1; i <= qntLeitores; i++){
         for(int j = i+1; j <= qntLeitores; j++){
-            AssociaLeitores(InfoCelulaLeitor(BuscaElementoLista(leitores, i)), InfoCelulaLeitor(BuscaElementoLista(leitores, j)));
+            AssociaLeitores(GetInfoCelula(BuscaElementoLista(leitores, i)), GetInfoCelula(BuscaElementoLista(leitores, j)));
         }
     }
 }
@@ -166,25 +165,23 @@ void LerLivros(tLista *livros, FILE *fp){
 
         //printf("%d; %s; %s; %s; %d", id, titulo, autor, genero, ano);
         livro = CadastraLivro(id, titulo, autor, genero, ano);
-        InsereElementoLista(livros, livro);
-        DefineTipoLivro(livros); // Define o tipo da nova célula inserida como "LIVRO"
+        InsereElementoLista(livros, livro, LIVRO);
     }
 }
 
 tLeitor *EncontraLeitor(tLista *leitores, int id, FILE *saida){
     if(BuscaElementoLista(leitores, id) != NULL){
-        return InfoCelulaLeitor(BuscaElementoLista(leitores, id));
+        return GetInfoCelula(BuscaElementoLista(leitores, id));
     }
 
     else{
-        fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", id);
         return NULL;
     }
 }
 
 tLivro *EncontraLivro(tLista *livros, int id, FILE *saida){
     if(BuscaElementoLista(livros, id) != NULL){
-        return InfoCelulaLivro(BuscaElementoLista(livros, id));
+        return GetInfoCelula(BuscaElementoLista(livros, id));
     }
 
     else{
@@ -218,8 +215,18 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
             if(leitor != NULL && livro != NULL){
-                AdicionarLivroLido(leitor, livro);
-                fprintf(saida, "%s leu \"%s\"\n", GetNomeLeitor(leitor), GetNomeLivro(livro));
+                if (LivroExisteNosDadosDoLeitor(leitor, id2, 1) == TRUE){
+                    fprintf(saida, "%s já leu \"%s\"\n", GetNomeLeitor(leitor), GetNomeLivro(livro));
+                }
+
+                else {
+                    AdicionarLivroLido(leitor, livro);
+                    fprintf(saida, "%s leu \"%s\"\n", GetNomeLeitor(leitor), GetNomeLivro(livro));
+                }
+            }
+
+            else if (leitor == NULL){
+                fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", GetIdLeitor(leitor));
             }
         }
 
@@ -234,8 +241,18 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
             //(n sei se vai usar elas separadas em outra parte do código)
 
             if(leitor != NULL && livro != NULL){
-                AdicionarLivroDesejado(leitor, livro);
-                fprintf(saida, "%s deseja ler \"%s\"\n", GetNomeLeitor(leitor), GetNomeLivro(livro));
+                if (LivroExisteNosDadosDoLeitor(leitor, id2, 2) == TRUE){
+                    fprintf(saida, "%s já deseja ler \"%s\"\n", GetNomeLeitor(leitor), GetNomeLivro(livro));
+                }
+                
+                else {
+                    AdicionarLivroDesejado(leitor, livro);
+                    fprintf(saida, "%s deseja ler \"%s\"\n", GetNomeLeitor(leitor), GetNomeLivro(livro));
+                }
+            }
+
+            else if (leitor == NULL){
+                fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", GetIdLeitor(leitor));
             }
         }
 
@@ -254,12 +271,29 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
             if(leitorOrig != NULL && leitorDest != NULL && livro != NULL){
                 jaLeu = RecebeRecomendacaoLivro(livro, leitorDest);
 
-                if (id1 == id3) fprintf(saida, "%s não pode recomendar livros para si mesmo\n", GetNomeLeitor(leitorOrig));
+                if (id1 == id3) {
+                    fprintf(saida, "%s não pode recomendar livros para si mesmo\n", GetNomeLeitor(leitorOrig));
+                    AceitarRecomendacao(leitorDest, livro, FALSE);
+                }
 
-                else if(jaLeu == 0) fprintf(saida, "%s recomenda \"%s\" para %s\n", GetNomeLeitor(leitorOrig), GetNomeLivro(livro), GetNomeLeitor(leitorDest));
+                else if(jaLeu == 0) {
+                    if (LivroExisteNosDadosDoLeitor(leitorDest, id2, 2) == TRUE){
+                        fprintf(saida, "%s já deseja ler \"%s\", recomendação desnecessária\n", GetNomeLeitor(leitorDest), GetNomeLivro(livro));
+                        AceitarRecomendacao(leitorDest, livro, FALSE);
+                    }
 
-                else fprintf(saida, "%s não precisa da recomendação de \"%s\" pois já leu este livro\n", GetNomeLeitor(leitorDest), GetNomeLivro(livro));
+                    else {
+                        fprintf(saida, "%s recomenda \"%s\" para %s\n", GetNomeLeitor(leitorOrig), GetNomeLivro(livro), GetNomeLeitor(leitorDest));
+                    }
+                }
+                else {
+                    fprintf(saida, "%s não precisa da recomendação de \"%s\" pois já leu este livro\n", GetNomeLeitor(leitorDest), GetNomeLivro(livro));
+                    AceitarRecomendacao(leitorDest, livro, FALSE);
+                }
             }
+            
+            else if (leitorOrig == NULL) fprintf(saida, "Erro: Leitor recomendador com ID %d não encontrado\n", GetIdLeitor(leitorOrig));
+            else if (leitorDest == NULL) fprintf(saida, "Erro: Leitor destinarário com ID %d não encontrado\n", GetIdLeitor(leitorDest));
         }
 
         else if(func == 4){
@@ -326,15 +360,7 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
 
 
                 ImprimeLivrosEmComum(leitorOrig, leitorDest, saida);
-                /*qtdEmComum = ProcuraLivrosEmComum(leitorOrig, leitorDest, livrosEmComum);
-
-                if(qtdEmComum != 0) {
-                    fprintf(saida, "Livros em comum entre %s e %s: ", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));
-
-                    ImprimeListaLivro(livrosEmComum, saida);
-                }
-
-                else fprintf(saida, "Livros em comum entre %s e %s: Nenhum livro em comum\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));*/
+                
             }
         }
 
@@ -359,7 +385,7 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
 
         else if(func == 8){
             fprintf(saida, "Imprime toda a BookED\n\n");
-            ImprimeListaLeitor(leitores, saida);
+            ImprimeLista(leitores, saida);
         }
 
         else fprintf(saida, "Erro: Comando %d não reconhecido\n", func);

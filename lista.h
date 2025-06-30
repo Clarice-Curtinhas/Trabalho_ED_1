@@ -30,23 +30,31 @@ tLista *CriaLista();
 
 /*
  * Insere um novo elemento no início da lista.
- * Inputs: ponteiro para a lista onde será inserido o elemento, ponteiro para o elemento a ser inserido
+ * Inputs: ponteiro para a lista onde será inserido o elemento, ponteiro para o elemento a ser inserido, tipo do elemento
  * Outputs: nenhum
  */
-void InsereElementoLista(tLista *lista, void *elemento);
-
-void InsereStringLista(tLista *lista, char *genero);
-
-void DefineTipoLeitor(tLista *lista);
-
-void DefineTipoLivro(tLista *lista);
+void InsereElementoLista(tLista *lista, void *elemento, int tipo);
 
 /*
- * Busca um leitor na lista indicada.
- * Inputs: ponteiro para a lista, leitor a ser procurado
+ * Retorna a informação de uma celula
+ * Inputs: ponteiro para uma celula
+ * Outputs: a informação
+ */
+void *GetInfoCelula(tCelula *cel);
+
+/*
+ * Busca um elemento na lista indicada.
+ * Inputs: ponteiro para a lista, ID do elemento a ser procurado
  * Outputs: nenhum
  */
-int ProcuraCelulaLeitor(tLista *lista, tLeitor *leitor);
+tCelula *BuscaElementoLista(tLista *lista, int id);
+
+/*
+ * Retira um elemento da lista indicada.
+ * Inputs: ponteiro para a lista, ID do elemento a ser procurado
+ * Outputs: nenhum
+ */
+void RetiraElementoLista(tLista *lista, int id);
 
 tCelula *GetPrimeiraCelula(tLista *lista);
 
@@ -65,50 +73,21 @@ tLeitor *RetornaCelulaDiferente(tLista *lista, tLista *analisadas);
  */
 int ComparaListasStrings(tLista *lista1, tLista *lista2);
 
+int TemAfinidade(tLista *afinidades1, tLista *afinidades2);
+
 /*
- * Busca um elemento na lista indicada.
- * Inputs: ponteiro para a lista, ID do elemento a ser procurado
+ * Imprime apenas os elementos em comum entre duas listas. Usado apenas para livros.
+ * Inputs: ponteiro para a lista, arquivo de saida
  * Outputs: nenhum
  */
-tCelula *BuscaElementoLista(tLista *lista, int id);
-
-/*
- * Retorna a informação de uma celula
- * Inputs: ponteiro para uma celula
- * Outputs: a informação
- */
-tLeitor *InfoCelulaLeitor(tCelula *cel);
-
-/*
- * Retorna a informação de uma celula
- * Inputs: ponteiro para uma celula
- * Outputs: a informação
- */
-tLivro *InfoCelulaLivro(tCelula *cel);
-
-/*
- * Compara as informações de duas listas, para ver se existe uma info igual.
- * Inputs: ponteiro para a primrira lista e para a segunda lista que vão ser comparadas.
- * Outputs: a informação, caso eles tenham informações que se repetem e NULL, caso contrário.
- */
-int ProcuraCelulasEmComum(tLista *lista1, tLista *lista2, tLista *livrosEmComum);
-
-/*
- * Retira um elemento da lista indicada.
- * Inputs: ponteiro para a lista, ID do elemento a ser procurado
- * Outputs: nenhum
- */
-void RetiraElementoLista(tLista *lista, int id);
-
 void ImprimeCelulasEmComum(tLista *lista1, tLista *lista2, FILE *saida);
 
 /*
- * Imprime uma lista de leitores.
- * Inputs: ponteiro para a lista
+ * Imprime uma lista.
+ * Inputs: ponteiro para a lista, arquivo de saida
  * Outputs: nenhum
  */
-void ImprimeListaLeitor(tLista *lista, FILE *saida);
-
+void ImprimeLista(tLista *lista, FILE *saida);
 
 /*
  * Imprime os nomes dos leitores.
@@ -116,27 +95,6 @@ void ImprimeListaLeitor(tLista *lista, FILE *saida);
  * Outputs: nenhum
  */
 void ImprimeListaNomesLeitores(tLista *lista, FILE *saida);
-
-/*
- * Imprime uma lista de livros.
- * Inputs: ponteiro para a lista
- * Outputs: nenhum
- */
-void ImprimeListaLivro(tLista *lista, FILE *saida);
-
-/*
- * Imprime uma lista de strings.
- * Inputs: ponteiro para a lista
- * Outputs: nenhum
- */
-void ImprimeListaStrings(tLista *lista);
-
-/*
- * Libera a memória de uma lista de Strings.
- * Inputs: ponteiro para a lista
- * Outputs: nenhum
- */
-void LiberaListaString(tLista *lista);
 
 /*
  * Libera a memória de uma lista de celulas.

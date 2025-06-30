@@ -44,37 +44,31 @@ tLeitor *CriaLeitor(char *nome, int id){
 }
 
 void AdicionarGenero(tLeitor *leitor, char *genero){
-    InsereStringLista(leitor->generos, genero);
+    InsereElementoLista(leitor->generos, genero, STRING);
 }
 
 void AssociaLeitores(tLeitor *leitor1, tLeitor *leitor2){
     if(leitor1 != NULL && leitor2 != NULL){
         if(ComparaListasStrings(leitor1->generos, leitor2->generos) == TRUE){
-            InsereElementoLista(leitor1->afinidades, leitor2);
-            InsereElementoLista(leitor2->afinidades, leitor1);
-
-            DefineTipoLeitor(leitor1->afinidades);
-            DefineTipoLeitor(leitor2->afinidades);   
+            InsereElementoLista(leitor1->afinidades, leitor2, LEITOR);
+            InsereElementoLista(leitor2->afinidades, leitor1, LEITOR);
         }
     }
 }
 
 void AdicionarLivroLido(tLeitor *leitor, tLivro *livro){
-    InsereElementoLista(leitor->lidos, livro);
-    DefineTipoLivro(leitor->lidos);
+    InsereElementoLista(leitor->lidos, livro, LIVRO);
 }
 
 void AdicionarLivroDesejado(tLeitor *leitor, tLivro *livro){
-    InsereElementoLista(leitor->desejados, livro);
-    DefineTipoLivro(leitor->lidos);
+    InsereElementoLista(leitor->desejados, livro, LIVRO);
 }
 
 int RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor){
     if(BuscaElementoLista(leitor->lidos, GetIdLivro(livro)) != NULL) return 1;
 
     else{
-        InsereElementoLista(leitor->recomendacoes, livro);
-        DefineTipoLivro(leitor->recomendacoes);
+        InsereElementoLista(leitor->recomendacoes, livro, LIVRO);
         return 0;
     }
 }
@@ -82,9 +76,9 @@ int RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor){
 int LivroExisteNosDadosDoLeitor(tLeitor *leitor, int id, int lista){
     tLivro *livro;
 
-    if(lista == 1) livro = InfoCelulaLivro(BuscaElementoLista(leitor->lidos, id));
-    else if(lista == 2) livro = InfoCelulaLivro(BuscaElementoLista(leitor->desejados, id));
-    else if(lista == 3) livro = InfoCelulaLivro(BuscaElementoLista(leitor->recomendacoes, id));
+    if(lista == 1) livro = GetInfoCelula(BuscaElementoLista(leitor->lidos, id));
+    else if(lista == 2) livro = GetInfoCelula(BuscaElementoLista(leitor->desejados, id));
+    else if(lista == 3) livro = GetInfoCelula(BuscaElementoLista(leitor->recomendacoes, id));
 
     if(livro != NULL){
         return TRUE;
@@ -94,8 +88,7 @@ int LivroExisteNosDadosDoLeitor(tLeitor *leitor, int id, int lista){
 
 void AceitarRecomendacao(tLeitor *leitor, tLivro *livro, int acao){
     if(acao == TRUE){
-        InsereElementoLista(leitor->desejados, livro);
-        DefineTipoLivro(leitor->desejados);
+        InsereElementoLista(leitor->desejados, livro, LIVRO);
         RetiraElementoLista(leitor->recomendacoes, GetIdLivro(livro));
     }
 
@@ -105,15 +98,12 @@ void AceitarRecomendacao(tLeitor *leitor, tLivro *livro, int acao){
     }
 }
 
-int ProcuraLivrosEmComum(tLeitor *leitor1, tLeitor *leitor2, tLista *livrosEmComum){
-
-    ProcuraCelulasEmComum(leitor1->lidos, leitor2->lidos, livrosEmComum);
-
-}
-
 void ImprimeLivrosEmComum(tLeitor *leitor1, tLeitor *leitor2, FILE *saida){
+
     ImprimeCelulasEmComum(leitor1->lidos, leitor2->lidos, saida);
 }
+
+// Ajeitar essa parte:
 
 /*int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2){
     tLista *analisadas;
@@ -145,7 +135,8 @@ void ImprimeLivrosEmComum(tLeitor *leitor1, tLeitor *leitor2, FILE *saida){
 }*/
 
 int ExisteAfinidade(tLeitor *leitor1, tLeitor *leitor2){
-    if (ProcuraCelulaLeitor(leitor1->afinidades, leitor2) == TRUE){
+    if (TemAfinidade(leitor1->afinidades, leitor2->afinidades) == TRUE){
+        printf("%s tem afinidade com %s\n\n", GetNomeLeitor(leitor1), GetNomeLeitor(leitor2));
         return TRUE;
     }
 
@@ -153,16 +144,16 @@ int ExisteAfinidade(tLeitor *leitor1, tLeitor *leitor2){
         tCelula *aux;
         tLeitor *leitorAux;
         aux = GetPrimeiraCelula(leitor1->afinidades);
-        leitorAux = InfoCelulaLeitor(aux);
+        leitorAux = GetInfoCelula(aux);
 
         while(aux != NULL){
-            if (ProcuraCelulaLeitor(leitorAux->afinidades, leitor2) == TRUE){
+            if (TemAfinidade(leitorAux->afinidades, leitor2->afinidades) == TRUE){
                 return TRUE;
             }
 
             else {
                 aux = GetProximaCelula(aux);
-                leitorAux = InfoCelulaLeitor(aux);
+                leitorAux = GetInfoCelula(aux);
             }
         }
 
@@ -172,6 +163,8 @@ int ExisteAfinidade(tLeitor *leitor1, tLeitor *leitor2){
 /*tLista *RecursaoAfinidades(tLeitor *leitor){
     return leitor->afinidades;
 }*/
+
+// até aqui.
 
 int GetIdLeitor(tLeitor *leitor){
     return leitor->id;
@@ -184,11 +177,11 @@ char *GetNomeLeitor(tLeitor *leitor){
 void ImprimeLeitor(tLeitor *leitor, FILE *saida){
     fprintf(saida, "Leitor: %s\n", leitor->nome);
     fprintf(saida, "Lidos: ");
-    ImprimeListaLivro(leitor->lidos, saida);
+    ImprimeLista(leitor->lidos, saida);
     fprintf(saida, "\nDesejados: ");
-    ImprimeListaLivro(leitor->desejados, saida);
+    ImprimeLista(leitor->desejados, saida);
     fprintf(saida, "\nRecomendacoes: ");
-    ImprimeListaLivro(leitor->recomendacoes, saida);
+    ImprimeLista(leitor->recomendacoes, saida);
     fprintf(saida, "\nAfinidades: ");
     ImprimeListaNomesLeitores(leitor->afinidades, saida);
 }
@@ -197,7 +190,7 @@ void DesalocaLeitor(tLeitor *leitor){
     LiberaCelulas(leitor->lidos);
     LiberaCelulas(leitor->desejados);
     LiberaCelulas(leitor->recomendacoes);
-    LiberaListaString(leitor->generos);
+    LiberaLista(leitor->generos);
     LiberaCelulas(leitor->afinidades);
 
     free(leitor->nome);
