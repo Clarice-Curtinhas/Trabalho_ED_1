@@ -29,18 +29,32 @@ typedef struct Lista tLista;
 tLista *CriaLista();
 
 /*
- * Insere um novo elemento no início da lista.
+ * Insere um novo elemento no final da lista.
  * Inputs: ponteiro para a lista onde será inserido o elemento, ponteiro para o elemento a ser inserido, tipo do elemento
  * Outputs: nenhum
  */
 void InsereElementoLista(tLista *lista, void *elemento, int tipo);
 
 /*
- * Retorna a informação de uma celula
- * Inputs: ponteiro para uma celula
+ * Retorna a informação de uma célula
+ * Inputs: ponteiro para uma célula
  * Outputs: a informação
  */
 void *GetInfoCelula(tCelula *cel);
+
+/*
+ * Retorna a primeira celula da lista
+ * Inputs: ponteiro para uma lista
+ * Outputs: a priemira célula
+ */
+tCelula *GetPrimeiraCelula(tLista *lista);
+
+/*
+ * Retorna a próxima celula a partir da célula passada
+ * Inputs: ponteiro para uma celula
+ * Outputs: a próxima célula
+ */
+tCelula *GetProximaCelula(tCelula *celula);
 
 /*
  * Busca um elemento na lista indicada.
@@ -56,23 +70,18 @@ tCelula *BuscaElementoLista(tLista *lista, int id);
  */
 void RetiraElementoLista(tLista *lista, int id);
 
-tCelula *GetPrimeiraCelula(tLista *lista);
-
-tCelula *GetProximaCelula(tCelula *celula);
 /*
- * Busca um leitor diferente do que já está sendo usado na lista indicada.
- * Inputs: ponteiro para a lista, leitor usado
- * Outputs: nenhum
- */
-tLeitor *RetornaCelulaDiferente(tLista *lista, tLista *analisadas);
-
-/*
- * Compara as informações de duas listas de strings, para ver se existe uma info igual.
+ * Compara as informações de duas listas de strings para ver se existe uma info igual.
  * Inputs: ponteiro para a primrira lista e para a segunda lista que vão ser comparadas.
  * Outputs: 1 caso eles tenham informações que se repetem e 0, caso contrário.
  */
 int ComparaListasStrings(tLista *lista1, tLista *lista2);
 
+/*
+ * Compara duas listas de afinidade para ver se existe uma info igual.
+ * Inputs: ponteiros para a primrira e para a segunda lista que vão ser comparadas.
+ * Outputs: 1 caso eles tenham informações que se repetem e 0, caso contrário.
+ */
 int TemAfinidade(tLista *afinidades1, tLista *afinidades2);
 
 /*
@@ -97,14 +106,14 @@ void ImprimeLista(tLista *lista, FILE *saida);
 void ImprimeListaNomesLeitores(tLista *lista, FILE *saida);
 
 /*
- * Libera a memória de uma lista de celulas.
+ * Libera a apenas a memória das celulas de uma lista.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
  */
 void LiberaCelulas(tLista *lista);
 
 /*
- * Libera a memória de uma lista.
+ * Libera a memória de uma lista (células e informações das células).
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
  */

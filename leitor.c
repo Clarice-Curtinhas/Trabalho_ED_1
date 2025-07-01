@@ -23,9 +23,7 @@ typedef struct Leitor{
  * Cria um leitor novo no sistema "BookED!" a partir das informações passadas.
  * Inputs: uma string com o nome da pessoa, um int com o id da pessoa
  * Outputs: um tipo "tLeitor" alocado e com as listas criadas
- * Pre-condicao: nenhuma
- * Pos-condicao: um tipo "tLeitor" alocado e com as listas criadas
-*/
+ */
 tLeitor *CriaLeitor(char *nome, int id){
     tLeitor *l;
 
@@ -43,12 +41,39 @@ tLeitor *CriaLeitor(char *nome, int id){
     return l;
 }
 
-void AdicionarGenero(tLeitor *leitor, char *genero){
-    InsereElementoLista(leitor->generos, genero, STRING);
-    FILE *fp;
-    ImprimeLista(leitor->generos, fp);
+/*
+ * Retorna o ID de um leitor.
+ * Inputs: um ponteiro para um leitor
+ * Outputs: o ID do leitor
+ */
+int GetIdLeitor(tLeitor *leitor){
+    return leitor->id;
 }
 
+/*
+ * Retorna o nome de um leitor.
+ * Inputs: um ponteiro para um leitor
+ * Outputs: o nome do leitor
+ */
+char *GetNomeLeitor(tLeitor *leitor){
+    return leitor->nome;
+}
+
+/*
+ * Adiciona um gênero literário à lista de gêneros de um leitor.
+ * Inputs: um ponteiro para um leitor, uma string com o gênero
+ * Outputs: nenhum
+ */
+void AdicionarGenero(tLeitor *leitor, char *genero){
+    InsereElementoLista(leitor->generos, genero, STRING);
+}
+
+/*
+ * Verifica se dois leitores leem pelo menos um gênero literário em comum. 
+   Se sim, um é adicionado à lista de afinidades do outro, e vice-versa.
+ * Inputs: um ponteiro para cada um dos dois leitores
+ * Outputs: nenhum
+ */
 void AssociaLeitores(tLeitor *leitor1, tLeitor *leitor2){
     if(leitor1 != NULL && leitor2 != NULL){
         if(ComparaListasStrings(leitor1->generos, leitor2->generos) == TRUE){
@@ -58,14 +83,29 @@ void AssociaLeitores(tLeitor *leitor1, tLeitor *leitor2){
     }
 }
 
+/*
+ * Adiciona um livro à lista de livros lidos de um leitor.
+ * Inputs: um ponteiro para um leitor, um ponteiro para um livro
+ * Outputs: nenhum
+ */
 void AdicionarLivroLido(tLeitor *leitor, tLivro *livro){
     InsereElementoLista(leitor->lidos, livro, LIVRO);
 }
 
+/*
+ * Adiciona um livro à lista de livros desejados de um leitor.
+ * Inputs: um ponteiro para um leitor, um ponteiro para um livro
+ * Outputs: nenhum
+ */
 void AdicionarLivroDesejado(tLeitor *leitor, tLivro *livro){
     InsereElementoLista(leitor->desejados, livro, LIVRO);
 }
 
+/*
+ * Adiciona um livro à lista de livros recomendados de um leitor se o livro ainda não estiver na lista.
+ * Inputs: um ponteiro para um leitor, um ponteiro para um livro
+ * Outputs: nenhum
+ */
 int RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor){
     if(BuscaElementoLista(leitor->lidos, GetIdLivro(livro)) != NULL) return 1;
 
@@ -75,19 +115,12 @@ int RecebeRecomendacaoLivro(tLivro *livro, tLeitor *leitor){
     }
 }
 
-int LivroExisteNosDadosDoLeitor(tLeitor *leitor, int id, int lista){
-    tLivro *livro;
-
-    if(lista == 1) livro = GetInfoCelula(BuscaElementoLista(leitor->lidos, id));
-    else if(lista == 2) livro = GetInfoCelula(BuscaElementoLista(leitor->desejados, id));
-    else if(lista == 3) livro = GetInfoCelula(BuscaElementoLista(leitor->recomendacoes, id));
-
-    if(livro != NULL){
-        return TRUE;
-    }
-    else return FALSE;
-}
-
+/*
+ * Adiciona um livro à lista de livros desejos de um leitor se a recomendação for aceita.
+   Se não, retira o livro da lista de livros recomendados.
+ * Inputs: um ponteiro para um leitor, um ponteiro para um livro, um int para indicar se o a recomendação foi aceita (1) ou não (0)
+ * Outputs: nenhum
+ */
 void AceitarRecomendacao(tLeitor *leitor, tLivro *livro, int acao){
     if(acao == TRUE){
         InsereElementoLista(leitor->desejados, livro, LIVRO);
@@ -96,18 +129,16 @@ void AceitarRecomendacao(tLeitor *leitor, tLivro *livro, int acao){
 
     else{
         RetiraElementoLista(leitor->recomendacoes, GetIdLivro(livro));
-        // ATENÇÃO: FAZER O RETIRA COM O GET ID É MAIS CUSTOSO PENSAR EM FAZER UMA FUNÇÃO QUE RETIRE DE FORMA DIRETA
     }
 }
 
-void ImprimeLivrosEmComum(tLeitor *leitor1, tLeitor *leitor2, FILE *saida){
-
-    ImprimeCelulasEmComum(leitor1->lidos, leitor2->lidos, saida);
-}
-
+/*
+ * Compara dois leitores para ver se existe afinidade (direta ou indireta) entre eles.
+ * Inputs: ponteiros para o primeiro e para o segundo leitor que vão ser comparados.
+ * Outputs: 1 caso eles tenham afinidade e 0, caso contrário.
+ */
 int ExisteAfinidade(tLeitor *leitor1, tLeitor *leitor2){
     if (TemAfinidade(leitor1->afinidades, leitor2->afinidades) == TRUE){
-        printf("%s tem afinidade com %s\n\n", GetNomeLeitor(leitor1), GetNomeLeitor(leitor2));
         return TRUE;
     }
 
@@ -132,14 +163,39 @@ int ExisteAfinidade(tLeitor *leitor1, tLeitor *leitor2){
     }
 }
 
-int GetIdLeitor(tLeitor *leitor){
-    return leitor->id;
+/*
+ * Procura um livro nas listas de livro de um leitor.
+ * Inputs: ponteiro para um leitor, ID do livro procurado, um int para indicar em qual das listas procurar
+ * Outputs: 1 caso o livro já esteja na lista indicada e 0, caso contrário.
+ */
+int LivroExisteNosDadosDoLeitor(tLeitor *leitor, int id, int lista){
+    tLivro *livro;
+
+    if(lista == 1) livro = GetInfoCelula(BuscaElementoLista(leitor->lidos, id));
+    else if(lista == 2) livro = GetInfoCelula(BuscaElementoLista(leitor->desejados, id));
+    else if(lista == 3) livro = GetInfoCelula(BuscaElementoLista(leitor->recomendacoes, id));
+
+    if(livro != NULL){
+        return TRUE;
+    }
+    else return FALSE;
 }
 
-char *GetNomeLeitor(tLeitor *leitor){
-    return leitor->nome;
+/*
+ * Imprime livros em comum entre dois leitores.
+ * Inputs: ponteiros para o primeiro e para o segundo leitor, ponteiro para o arquivo de saída
+ * Outputs: nenhum
+ */
+void ImprimeLivrosEmComum(tLeitor *leitor1, tLeitor *leitor2, FILE *saida){
+
+    ImprimeCelulasEmComum(leitor1->lidos, leitor2->lidos, saida);
 }
 
+/*
+ * Imprime os dados de um leitor.
+ * Inputs: ponteiro para um leitor, ponteiro para o arquivo de saída
+ * Outputs: nenhum
+ */
 void ImprimeLeitor(tLeitor *leitor, FILE *saida){
     fprintf(saida, "Leitor: %s\n", leitor->nome);
     fprintf(saida, "Lidos: ");
@@ -152,13 +208,20 @@ void ImprimeLeitor(tLeitor *leitor, FILE *saida){
     ImprimeListaNomesLeitores(leitor->afinidades, saida);
 }
 
+/*
+ * Desaloca uma estrutura do tipo tLeitor.
+ * Inputs: ponteiro para um leitor
+ * Outputs: nenhum
+ */
 void DesalocaLeitor(tLeitor *leitor){
-    LiberaCelulas(leitor->lidos);
-    LiberaCelulas(leitor->desejados);
-    LiberaCelulas(leitor->recomendacoes);
-    LiberaLista(leitor->generos);
-    LiberaCelulas(leitor->afinidades);
+    if (leitor != NULL){
+        LiberaCelulas(leitor->lidos);
+        LiberaCelulas(leitor->desejados);
+        LiberaCelulas(leitor->recomendacoes);
+        LiberaLista(leitor->generos);
+        LiberaCelulas(leitor->afinidades);
 
-    free(leitor->nome);
-    free(leitor);
+        free(leitor->nome);
+        free(leitor);
+    }
 }

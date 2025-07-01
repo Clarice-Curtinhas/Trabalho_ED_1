@@ -2,6 +2,7 @@
  * Created by Clarice Curtinhas Santos on 6/6/25
  * Copyright © 2025 Clarice Curtinhas Santos, Ana Luisa Casotti de Andrade. All rights reserved.
  */
+
 #include "lista.h"
 
 struct Celula {
@@ -31,7 +32,7 @@ tLista *CriaLista(){
 }
 
 /*
- * Insere um novo elemento no início da lista.
+ * Insere um novo elemento no final da lista.
  * Inputs: ponteiro para a lista onde será inserido o elemento, ponteiro para o elemento a ser inserido, tipo do elemento
  * Outputs: nenhum
  */
@@ -49,18 +50,18 @@ void InsereElementoLista(tLista *lista, void *elemento, int tipo){
          nova->info = elemento;
       }
       
-      nova->prox = lista->prim;
+      nova->ant = lista->ult;
 
-      if (lista->prim != NULL){
-         lista->prim->ant = nova;
+      if (lista->ult != NULL){
+         lista->ult->prox = nova;
       }
 
       else {
-         lista->ult = nova;
+         lista->prim = nova;
       }
 
-      lista->prim = nova;
-      nova->ant = NULL;
+      lista->ult = nova;
+      nova->prox = NULL;
    }
 
    else {
@@ -69,13 +70,31 @@ void InsereElementoLista(tLista *lista, void *elemento, int tipo){
 }
 
 /*
- * Retorna a informação de uma celula
- * Inputs: ponteiro para uma celula
+ * Retorna a informação de uma célula
+ * Inputs: ponteiro para uma célula
  * Outputs: a informação
  */
 void *GetInfoCelula(tCelula *cel){
    if(cel != NULL) return cel->info;
    else return NULL;
+}
+
+/*
+ * Retorna a primeira celula da lista
+ * Inputs: ponteiro para uma lista
+ * Outputs: a priemira célula
+ */
+tCelula *GetPrimeiraCelula(tLista *lista){
+   return lista->prim;
+}
+
+/*
+ * Retorna a próxima celula a partir da célula passada
+ * Inputs: ponteiro para uma celula
+ * Outputs: a próxima célula
+ */
+tCelula *GetProximaCelula(tCelula *celula){
+   return celula->prox;
 }
 
 /*
@@ -148,48 +167,8 @@ void RetiraElementoLista(tLista *lista, int id){
          aux->prox->ant = aux->ant;
       }
       
-      //return aux; // talvez a gnt deva usar um return para caso precisarmos desse livro;
-      //free(aux); // comentei para podermos usar um livro mais de uma vez, se vc da um free aqui ela para de existir em outras listas
+      free(aux); // Libera só a célula, não a informação dela
    }
-}
-
-tCelula *GetPrimeiraCelula(tLista *lista){
-   return lista->prim;
-}
-
-tCelula *GetProximaCelula(tCelula *celula){
-   return celula->prox;
-}
-
-/*
- * Busca um leitor diferente do que já está sendo usado na lista indicada.
- * Inputs: ponteiro para a lista, leitor usado
- * Outputs: nenhum
- */
-tLeitor *RetornaCelulaDiferente(tLista *lista, tLista *analisadas){
-   tCelula *aux, *ajud;
-   int jaExiste;
-   aux = lista->prim;
-
-   while(aux != NULL){
-      jaExiste = 0;
-      ajud = analisadas->prim;
-
-      while(ajud != NULL){
-         if((tLeitor*)aux->info == (tLeitor*)ajud->info){
-            jaExiste = 1;
-            break;
-         }
-
-         ajud = ajud->prox;
-      }
-
-      if(jaExiste == 0) return (tLeitor*)aux->info;
-
-      aux = aux->prox;
-   }
-
-   return NULL;
 }
 
 /*
@@ -209,6 +188,11 @@ int ComparaListasStrings(tLista *lista1, tLista *lista2){
    return 0;
 }
 
+/*
+ * Compara duas listas de afinidade para ver se existe uma info igual.
+ * Inputs: ponteiros para a primeira e para a segunda lista que vão ser comparadas.
+ * Outputs: 1 caso eles tenham informações que se repetem e 0, caso contrário.
+ */
 int TemAfinidade(tLista *afinidades1, tLista *afinidades2){
    tCelula *aux1, *aux2;
    int id1, id2;
@@ -246,8 +230,8 @@ void ImprimeCelulasEmComum(tLista *lista1, tLista *lista2, FILE *saida){
 
    int qtd = 0;
 
-   for(aux1 = lista1->ult; aux1 != NULL; aux1 = aux1->ant){
-      for(aux2 = lista2->ult; aux2 != NULL; aux2 = aux2->ant){
+   for(aux1 = lista1->prim; aux1 != NULL; aux1 = aux1->prox){
+      for(aux2 = lista2->prim; aux2 != NULL; aux2 = aux2->prox){
          if(GetIdLivro(aux1->info) == GetIdLivro(aux2->info)) {
             InsereElementoLista(livrosEmComum, aux1->info, LIVRO);
             qtd++;
@@ -269,7 +253,7 @@ void ImprimeCelulasEmComum(tLista *lista1, tLista *lista2, FILE *saida){
 void ImprimeLista(tLista *lista, FILE *saida){
    tCelula *aux;
    int start = 0;
-   aux = lista->ult;
+   aux = lista->prim;
 
    while(aux != NULL){
       if (aux->tipo == LEITOR){
@@ -282,12 +266,8 @@ void ImprimeLista(tLista *lista, FILE *saida){
          ImprimeLivro(aux->info, saida);
          start = 1;
       }
-
-      else if (aux->tipo == STRING){
-         printf("%s ", ((char*)aux->info));
-      }
       
-      aux = aux->ant;
+      aux = aux->prox;
    }
 }
 
@@ -300,25 +280,28 @@ void ImprimeListaNomesLeitores(tLista *lista, FILE *saida){
    tCelula *aux;
    int start = 0;
 
-   aux = lista->ult;
+   aux = lista->prim;
 
    while(aux != NULL){
       if(start == 1) fprintf(saida, ", ");
 
       fprintf(saida, "%s", GetNomeLeitor(aux->info));
-      aux = aux->ant;
+      aux = aux->prox;
 
       start = 1;
    }
 }
 
 /*
- * Libera a memória de uma lista de celulas.
+ * Libera a apenas a memória das celulas de uma lista.
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
  */
 void LiberaCelulas(tLista *lista){
    tCelula *aux;
+
+   if (lista == NULL) return;
+
    aux = lista->prim;
 
    if (lista != NULL && aux != NULL){
@@ -339,27 +322,30 @@ void LiberaCelulas(tLista *lista){
 }
 
 /*
- * Libera a memória de uma lista.
+ * Libera a memória de uma lista (células e informações das células).
  * Inputs: ponteiro para a lista
  * Outputs: nenhum
  */
 void LiberaLista(tLista *lista){
    tCelula *aux;
+
+   if (lista == NULL) return;
+
    aux = lista->prim;
 
-   if (lista != NULL && aux != NULL){
+   if (aux != NULL){
 
       while(1){
          if (aux->tipo == LEITOR){
-            DesalocaLeitor(aux->info);
+            if (aux->info != NULL) DesalocaLeitor(aux->info);
          }
 
          else if (aux->tipo == LIVRO){
-            LiberaLivro(aux->info);
+            if (aux->info != NULL) LiberaLivro(aux->info);
          }
 
          else if (aux->tipo == STRING){
-            free(aux->info);
+            if (aux->info != NULL) free(aux->info);
          }
          
          if (aux->prox != NULL){
