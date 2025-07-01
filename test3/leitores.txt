@@ -13,4 +13,4 @@ Id;nome;n_afinidades; afinidades
 12;Leonardo;2;Terror;História
 13;Mariana;3;Mistério;Biografia;Ficção Científica
 14;Nicolas;2;Fantasia;Aventura
-15;Olivia;3;Drama;História;Terror 
+15;Olivia;3;Drama;História;Terror

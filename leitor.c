@@ -45,6 +45,8 @@ tLeitor *CriaLeitor(char *nome, int id){
 
 void AdicionarGenero(tLeitor *leitor, char *genero){
     InsereElementoLista(leitor->generos, genero, STRING);
+    FILE *fp;
+    ImprimeLista(leitor->generos, fp);
 }
 
 void AssociaLeitores(tLeitor *leitor1, tLeitor *leitor2){
@@ -103,37 +105,6 @@ void ImprimeLivrosEmComum(tLeitor *leitor1, tLeitor *leitor2, FILE *saida){
     ImprimeCelulasEmComum(leitor1->lidos, leitor2->lidos, saida);
 }
 
-// Ajeitar essa parte:
-
-/*int VerificaAfinidade(tLeitor *leitor1, tLeitor *leitor2){
-    tLista *analisadas;
-    tLeitor *novoLeitor;
-
-    analisadas = CriaLista();
-
-    if(ProcuraCelulaLeitor(leitor1->afinidades, leitor1, leitor2, analisadas) == TRUE){
-        LiberaCelulas(analisadas);
-        return TRUE;
-    }
-
-    else{
-        InsereElementoLista(analisadas, leitor1);
-
-        while((novoLeitor = RetornaCelulaDiferente(leitor1->afinidades, analisadas)) != NULL){
-            if(ProcuraCelulaLeitor(novoLeitor->afinidades, novoLeitor, leitor2, analisadas) == TRUE){
-                LiberaCelulas(analisadas);
-                return TRUE;
-            }
-
-            InsereElementoLista(analisadas, novoLeitor);
-        }
-    }
-
-    LiberaCelulas(analisadas);
-
-    return FALSE;
-}*/
-
 int ExisteAfinidade(tLeitor *leitor1, tLeitor *leitor2){
     if (TemAfinidade(leitor1->afinidades, leitor2->afinidades) == TRUE){
         printf("%s tem afinidade com %s\n\n", GetNomeLeitor(leitor1), GetNomeLeitor(leitor2));
@@ -160,11 +131,6 @@ int ExisteAfinidade(tLeitor *leitor1, tLeitor *leitor2){
         return FALSE;
     }
 }
-/*tLista *RecursaoAfinidades(tLeitor *leitor){
-    return leitor->afinidades;
-}*/
-
-// até aqui.
 
 int GetIdLeitor(tLeitor *leitor){
     return leitor->id;

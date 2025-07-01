@@ -19,7 +19,7 @@ Existe afinidade entre Marcus e Gaius
 Existe afinidade entre Marcus e Lucius
 Existe afinidade entre Lucius e Julia
 Existe afinidade entre Julia e Claudia
-Não existe afinidade entre Claudia e Livia
+Existe afinidade entre Claudia e Livia
 Marcus deseja ler "Agosto"
 Marcus deseja ler "A Moreninha"
 Marcus deseja ler "Incidente em Antares"
@@ -60,11 +60,11 @@ Livros em comum entre Claudia e Livia: Nenhum livro em comum
 Existe afinidade entre Marcus e Lucius
 Existe afinidade entre Julia e Claudia
 Existe afinidade entre Lucius e Julia
-Não existe afinidade entre Claudia e Livia
-Não existe afinidade entre Marcus e Livia
+Existe afinidade entre Claudia e Livia
+Existe afinidade entre Marcus e Livia
 Existe afinidade entre Marcus e Julia
 Existe afinidade entre Gaius e Claudia
-Não existe afinidade entre Lucius e Livia
+Existe afinidade entre Lucius e Livia
 Imprime toda a BookED
 
 Leitor: Marcus
@@ -95,11 +95,11 @@ Leitor: Claudia
 Lidos: O Cortiço, O Xangô de Baker Street, Senhora
 Desejados: Incidente em Antares, A Grande Arte
 Recomendacoes: 
-Afinidades: Lucius, Julia
+Afinidades: Lucius, Julia, Livia
 
 Leitor: Livia
 Lidos: A Hora da Estrela, O Caso da Estranha Fotografia
 Desejados: Os Sertões, Nós
 Recomendacoes: 
-Afinidades: 
+Afinidades: Claudia
 

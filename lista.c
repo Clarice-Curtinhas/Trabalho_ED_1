@@ -282,6 +282,10 @@ void ImprimeLista(tLista *lista, FILE *saida){
          ImprimeLivro(aux->info, saida);
          start = 1;
       }
+
+      else if (aux->tipo == STRING){
+         printf("%s ", ((char*)aux->info));
+      }
       
       aux = aux->ant;
    }

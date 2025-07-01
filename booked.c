@@ -14,6 +14,11 @@
 #define TRUE 1
 #define FALSE 0
 
+#define ORIGINAL -1
+#define DESTINATARIO -2
+
+char *RetiraEspacosString(char *string);
+
 /*
  * Inicializa a lista de leitores, fazendo as associações de afinidades.
  * Inputs: um tipo "tLista" onde serão alocados os leitores e um FILE *fp para a leitura dos dados
@@ -113,6 +118,27 @@ int main(int argc, const char **argv){
     return 0;
 }
 
+char *RetiraEspacosString(char *string){
+    int tam;
+
+    tam = strlen(string);
+
+    if(string[0] == ' '){
+        for(int i = 0; i < tam; i++){
+            if(i+1 != tam) string[i] = string[i+1];
+            else string[i] = '\0';
+        }
+    }
+
+    tam = strlen(string);
+
+    if(string[tam-1] == ' '){
+        string[tam-1] = '\0';
+    }
+
+    return string;
+}
+
 /*
  * Inicializa a lista de leitores, fazendo as associações de afinidades.
  * Inputs: um tipo "tLista" onde serão alocados os leitores e um FILE *fp para a leitura dos dados
@@ -129,10 +155,12 @@ void LerLeitores(tLista *leitores, FILE *fp){
 
         leitor = CriaLeitor(nome, id);
 
+        printf("%s\n", nome);
+
        for(int i = 0; i < n; i++){
             if(i != n-1) fscanf(fp, "%99[^;];", genero);
             else fscanf(fp, "%99[^\n]", genero);
-            AdicionarGenero(leitor, genero);
+            AdicionarGenero(leitor, RetiraEspacosString(genero));
         }
 
         InsereElementoLista(leitores, leitor, LEITOR);
@@ -169,23 +197,41 @@ void LerLivros(tLista *livros, FILE *fp){
     }
 }
 
-tLeitor *EncontraLeitor(tLista *leitores, int id, FILE *saida){
+tLeitor *EncontraLeitor(tLista *leitores, int id, FILE *saida, int comando, int tipoLeitor){
     if(BuscaElementoLista(leitores, id) != NULL){
         return GetInfoCelula(BuscaElementoLista(leitores, id));
     }
 
     else{
+        if (comando == 3){
+            if (tipoLeitor == ORIGINAL) fprintf(saida, "Erro: Leitor recomendador com ID %d não encontrado\n", id);
+            else if (tipoLeitor == DESTINATARIO) fprintf(saida, "Erro: Leitor destinatário com ID %d não encontrado\n", id);
+        }
+
+        else if (comando == 4 || comando == 5){
+            if (tipoLeitor == ORIGINAL) fprintf(saida, "Erro: Leitor recomendador com ID %d não encontrado\n", id);
+            else if (tipoLeitor == DESTINATARIO) fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", id);
+        }
+
+        /*else if (comando == 5){
+            if (tipoLeitor == DESTINATARIO) fprintf(saida, "Erro: Leitor recomendador com ID %d não encontrado\n", id);
+            else if (tipoLeitor == ORIGINAL) fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", id);
+        }*/
+
+        else if (comando == 1 || comando == 2 || comando == 6 || comando == 7){
+            fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", id);
+        }
         return NULL;
     }
 }
 
-tLivro *EncontraLivro(tLista *livros, int id, FILE *saida){
+tLivro *EncontraLivro(tLista *livros, int id, FILE *saida, int comando){
     if(BuscaElementoLista(livros, id) != NULL){
         return GetInfoCelula(BuscaElementoLista(livros, id));
     }
 
     else{
-        fprintf(saida, "Erro: Livro com ID %d não encontrado\n", id);
+        if (comando != 4 && comando != 5) fprintf(saida, "Erro: Livro com ID %d não encontrado\n", id);
         return NULL;
     }
 }
@@ -205,12 +251,14 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
 
     while(fscanf(fp, "%d;%d;%d;%d", &func, &id1, &id2, &id3) == 4){
 
+        printf("funcao %d\n", func);
+
         if(func == 1){
             tLeitor *leitor;
             tLivro *livro;
 
-            leitor = EncontraLeitor(leitores, id1, saida);
-            livro = EncontraLivro(livros, id2, saida);
+            leitor = EncontraLeitor(leitores, id1, saida, 1, 0);
+            livro = EncontraLivro(livros, id2, saida, 1);
             //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
@@ -225,17 +273,15 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
                 }
             }
 
-            else if (leitor == NULL){
-                fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", GetIdLeitor(leitor));
-            }
+            printf("comando 1\n");
         }
 
         else if(func == 2){
             tLeitor *leitor;
             tLivro *livro;
 
-            leitor = EncontraLeitor(leitores, id1, saida);
-            livro = EncontraLivro(livros, id2, saida);
+            leitor = EncontraLeitor(leitores, id1, saida, 2, 0);
+            livro = EncontraLivro(livros, id2, saida, 2);
             //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
@@ -251,9 +297,7 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
                 }
             }
 
-            else if (leitor == NULL){
-                fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", GetIdLeitor(leitor));
-            }
+            printf("comando 2\n");
         }
 
         else if(func == 3){
@@ -261,9 +305,9 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
             tLivro *livro;
             int jaLeu = 0;
 
-            leitorOrig = EncontraLeitor(leitores, id1, saida);
-            leitorDest = EncontraLeitor(leitores, id3, saida);
-            livro = EncontraLivro(livros, id2, saida);
+            leitorOrig = EncontraLeitor(leitores, id1, saida, 3, ORIGINAL);
+            leitorDest = EncontraLeitor(leitores, id3, saida, 3, DESTINATARIO);
+            livro = EncontraLivro(livros, id2, saida, 3);
             //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
@@ -291,24 +335,24 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
                     AceitarRecomendacao(leitorDest, livro, FALSE);
                 }
             }
-            
-            else if (leitorOrig == NULL) fprintf(saida, "Erro: Leitor recomendador com ID %d não encontrado\n", GetIdLeitor(leitorOrig));
-            else if (leitorDest == NULL) fprintf(saida, "Erro: Leitor destinarário com ID %d não encontrado\n", GetIdLeitor(leitorDest));
+
+            printf("comando 3\n");
         }
 
         else if(func == 4){
             tLeitor *leitorOrig, *leitorDest;
             tLivro *livro;
 
-            livro = EncontraLivro(livros, id2, saida);
+            leitorOrig = EncontraLeitor(leitores, id1, saida, 4, DESTINATARIO);
+            leitorDest = EncontraLeitor(leitores, id3, saida, 4, ORIGINAL);
+            if (leitorOrig == NULL || leitorDest == NULL) continue;
 
-            leitorOrig = EncontraLeitor(leitores, id1, saida);
-            leitorDest = EncontraLeitor(leitores, id3, saida);
+            livro = EncontraLivro(livros, id2, saida, 4);
             //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
 
-            if(leitorOrig != NULL && leitorDest != NULL && livro != NULL){
+            if(leitorOrig != NULL && leitorDest != NULL){
                 if(LivroExisteNosDadosDoLeitor(leitorOrig, id2, 3) == TRUE){
                     AceitarRecomendacao(leitorOrig, livro, TRUE);
                     fprintf(saida, "%s aceita recomendação \"%s\" de %s\n", GetNomeLeitor(leitorOrig), GetNomeLivro(livro), GetNomeLeitor(leitorDest));
@@ -318,21 +362,22 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
                     fprintf(saida, "%s não possui recomendação do livro ID %d feita por %s\n", GetNomeLeitor(leitorOrig), id2, GetNomeLeitor(leitorDest));
                 }
             }
+            printf("comando 4\n");
         }
 
         else if(func == 5){
             tLeitor *leitorOrig, *leitorDest;
             tLivro *livro;
 
-            livro = EncontraLivro(livros, id2, saida);
+            livro = EncontraLivro(livros, id2, saida, 5);
 
-            leitorOrig = EncontraLeitor(leitores, id1, saida);
-            leitorDest = EncontraLeitor(leitores, id3, saida);
+            leitorOrig = EncontraLeitor(leitores, id1, saida, 5, DESTINATARIO);
+            leitorDest = EncontraLeitor(leitores, id3, saida, 5, ORIGINAL);
             //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
 
-            if(leitorOrig != NULL && leitorDest != NULL && livro != NULL){
+            if(leitorOrig != NULL && leitorDest != NULL){
                 if(LivroExisteNosDadosDoLeitor(leitorOrig, id2, 3) == TRUE){
                     AceitarRecomendacao(leitorOrig, livro, FALSE);
                     fprintf(saida, "%s rejeita recomendação \"%s\" de %s\n", GetNomeLeitor(leitorOrig), GetNomeLivro(livro), GetNomeLeitor(leitorDest));
@@ -342,6 +387,7 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
                     fprintf(saida, "%s não possui recomendação do livro ID %d feita por %s\n", GetNomeLeitor(leitorOrig), id2, GetNomeLeitor(leitorDest));
                 }
             }
+            printf("comando 5\n");
         }
 
         else if(func == 6){
@@ -349,8 +395,8 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
             tLeitor *leitorOrig, *leitorDest;
             int qtdEmComum;
 
-            leitorOrig = EncontraLeitor(leitores, id1, saida);
-            leitorDest = EncontraLeitor(leitores, id3, saida);
+            leitorOrig = EncontraLeitor(leitores, id1, saida, 6, ORIGINAL);
+            leitorDest = EncontraLeitor(leitores, id3, saida, 6, DESTINATARIO);
             //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
@@ -362,14 +408,16 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
                 ImprimeLivrosEmComum(leitorOrig, leitorDest, saida);
                 
             }
+
+            printf("comando 6\n");
         }
 
         else if(func == 7){
             int temAfinidade;
             tLeitor *leitorOrig, *leitorDest;
 
-            leitorOrig = EncontraLeitor(leitores, id1, saida);
-            leitorDest = EncontraLeitor(leitores, id3, saida);
+            leitorOrig = EncontraLeitor(leitores, id1, saida, 7, ORIGINAL);
+            leitorDest = EncontraLeitor(leitores, id3, saida, 7, DESTINATARIO);
             //USEI UMA FUNÇÃO DENTRO DA OUTRA MUITAS VEZES
             //VER SE NÃO É MELHOR JUNTAR AS DUAS FUNÇÕES EM UMA SÓ 
             //(n sei se vai usar elas separadas em outra parte do código)
@@ -381,11 +429,13 @@ void ExecutarComandos(tLista *leitores, tLista *livros, FILE *fp, FILE *saida){
                 if(temAfinidade == TRUE) fprintf(saida, "Existe afinidade entre %s e %s\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));
                 else fprintf(saida, "Não existe afinidade entre %s e %s\n", GetNomeLeitor(leitorOrig), GetNomeLeitor(leitorDest));
             }
+            printf("comando 7\n");
         }
 
         else if(func == 8){
             fprintf(saida, "Imprime toda a BookED\n\n");
             ImprimeLista(leitores, saida);
+            printf("comando 8\n");
         }
 
         else fprintf(saida, "Erro: Comando %d não reconhecido\n", func);

@@ -88,7 +88,7 @@ Leitor: Diego
 Lidos: O Coruja
 Desejados: Admirável Mundo Novo
 Recomendacoes: 
-Afinidades: Carla, Elena, Isabela, João, Leonardo, Mariana
+Afinidades: Carla, Elena, Isabela, João, Leonardo, Mariana, Olivia
 
 Leitor: Elena
 Lidos: A Droga da Obediência
@@ -118,7 +118,7 @@ Leitor: Isabela
 Lidos: E Não Sobrou Nenhum
 Desejados: As Aventuras de Tom Sawyer
 Recomendacoes: Vaga Música
-Afinidades: Bruno, Carla, Diego, Elena, João, Leonardo, Mariana, Nicolas
+Afinidades: Bruno, Carla, Diego, Elena, João, Leonardo, Mariana, Nicolas, Olivia
 
 Leitor: João
 Lidos: Robinson Crusoé
@@ -154,5 +154,5 @@ Leitor: Olivia
 Lidos: Auto da Barca do Inferno
 Desejados: O Coruja
 Recomendacoes: O Senhor dos Anéis
-Afinidades: Amanda, Carla, Felipe, Gabriela, Henrique, Karen, Leonardo
+Afinidades: Amanda, Carla, Diego, Felipe, Gabriela, Henrique, Isabela, Karen, Leonardo
 

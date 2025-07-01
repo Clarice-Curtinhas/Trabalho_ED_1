@@ -4,4 +4,4 @@ Id;nome;n_afinidades; afinidades
 3;Julia;1;Mistério
 4;Gaius;2;Romance;Terror
 5;Claudia;2;Mistério;História
-6;Livia;1;História 
+6;Livia;1; História 
